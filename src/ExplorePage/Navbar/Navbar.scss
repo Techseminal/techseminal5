@@ -1,0 +1,32 @@
+@import "../../global.scss";
+
+.Navbar {
+    .NavBrand {
+        font-family: "Mate SC", serif;
+        font-size: 24px;
+    }
+    .NavbarToogle {
+        outline: none;
+        border: none;
+    }
+    .Navlink {
+        margin: 0 20px;
+        i {
+            margin-right: 0 5px;
+            font-size: 16px;
+        }
+    }
+    .UploadBtn {
+        border-radius: 25px;
+        margin: 0 20px;
+        padding: 10px 20px;
+        border: none;
+        color: #fff;
+        font-family: "Poppins", sans-serif;
+        font-size: 14px;
+        letter-spacing: 1px;
+        @media screen and (max-width: 991px) {
+            margin-top: 20px;
+        }
+    }
+}
