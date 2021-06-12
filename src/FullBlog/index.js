@@ -1,16 +1,46 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import { firestore } from '../firebase/firebase-utils'
 import { Container, Image, Row, Button, Card } from 'react-bootstrap'
-import './FullBlog.scss'
-import PortrayData from '../ExplorePage/Portray/PortrayData'
 import { usePalette } from 'react-palette'
 import { AiOutlineStar, AiOutlineSave, AiOutlineShareAlt, AiFillFacebook, AiOutlineTwitter, AiFillLinkedin, AiFillInstagram, AiFillMail, AiOutlineTeam } from 'react-icons/ai'
 
+import './FullBlog.scss'
+
 
 function FullPortray(props) {
-
     const portrayId = props.match.params.id;
+    const [Title, setTitle] = useState('');
+    const [discrp, setdiscrp] = useState('');
+    const [author, setauthor] = useState('');
+    const [image, setimage] = useState('');
+    const [UID, setUID] = useState('');
+    const [Mail, setMail] = useState('');
+    const [Facebook, setFacebook] = useState('');
+    const [Instagram, setInstagram] = useState('');
+    const [Twitter, setTwitter] = useState('');
+    const [LinkedIn, setLinkedIn] = useState('');
+    useEffect(() => {
+        firestore.collection('Blogs').doc(portrayId).onSnapshot(doc => {
+            setTitle(doc.data().title)
+            setdiscrp(doc.data().discrp)
+            setimage(doc.data().image)
+            setauthor(doc.data().author)
+            setUID(doc.data().userUID)
+        })
+    }, [portrayId]);
+    useEffect(() => {
+        if (UID !== '') {
+            firestore.collection('Users').doc(UID).onSnapshot(doc => {
+                setMail(doc.data().mail)
+                setFacebook(doc.data().facebook)
+                setInstagram(doc.data().instagram)
+                setTwitter(doc.data().twitter)
+                setLinkedIn(doc.data().linkedIn)
+            })
+        }
+    }, [UID]);
     // eslint-disable-next-line
-    const { data, loading, error } = usePalette(PortrayData[portrayId].image)
+    const { data, loading, error } = usePalette(image)
 
     return (
         <>
@@ -22,7 +52,7 @@ function FullPortray(props) {
                         <div className="UserAvatar" style={{ color: data.vibrant }}>
                             <img src="https://png.pngtree.com/png-vector/20190625/ourlarge/pngtree-business-male-user-avatar-vector-png-image_1511454.jpg" alt="" height="24px" />
                             <div>
-                                <strong>{PortrayData[portrayId].author}</strong>
+                                <strong>{author}</strong>
                                 <p>Posted on <cite>22nd May 2021</cite></p>
                             </div>
                         </div>
@@ -35,35 +65,15 @@ function FullPortray(props) {
 
                     {/* Article Section */}
                     <article>
-                        <Image fluid className="CoverPhoto" src={PortrayData[portrayId].image} alt="" />
-                        <p className="Title"><u>{PortrayData[portrayId].title}</u></p>
+                        <Image fluid className="CoverPhoto" src={image} alt="" />
+                        <p className="Title"><u>{Title}</u></p>
                         <p className="descrip">
-                            Ipsum molestiae natus adipisci modi eligendi? Debitis amet quae unde
-                            commodi aspernatur enim, consectetur. Cumque deleniti temporibus
-                            ipsam atque a dolores quisquam quisquam adipisci possimus
-                            laboriosam. Quibusdam facilis doloribus debitis! Sit quasi quod
-                            accusamus eos quod. Ab quos consequuntur eaque quo rem! Mollitia
-                            reiciendis porro quo magni incidunt dolore amet atque facilis ipsum
-                            deleniti rem!
-                            Ipsum molestiae natus adipisci modi eligendi? Debitis amet quae unde
-                            commodi aspernatur enim, consectetur. Cumque deleniti temporibus
-                            ipsam atque a dolores quisquam quisquam adipisci possimus
-                            laboriosam. Quibusdam facilis doloribus debitis! Sit quasi quod
-                            accusamus eos quod. Ab quos consequuntur eaque quo rem! Mollitia
-                            reiciendis porro quo magni incidunt dolore amet atque facilis ipsum
-                            deleniti rem!
-                            Ipsum molestiae natus adipisci modi eligendi? Debitis amet quae unde
-                            commodi aspernatur enim, consectetur. Cumque deleniti temporibus
-                            ipsam atque a dolores quisquam quisquam adipisci possimus
-                            laboriosam. Quibusdam facilis doloribus debitis! Sit quasi quod
-                            accusamus eos quod. Ab quos consequuntur eaque quo rem! Mollitia
-                            reiciendis porro quo magni incidunt dolore amet atque facilis ipsum
-                            deleniti rem!
+                            {discrp}
                         </p>
                     </article>
-                    <br/>
-                    <Button variant="light" className="TeamRequestBtn" style={{border:`1px solid ${data.vibrant}`}} title="Send team request"><AiOutlineTeam style={{ color: data.vibrant }} />&nbsp;&nbsp;Team request</Button>
-                    <br/>
+                    <br />
+                    <Button variant="light" className="TeamRequestBtn" style={{ border: `1px solid ${data.vibrant}` }} title="Send team request"><AiOutlineTeam style={{ color: data.vibrant }} />&nbsp;&nbsp;Team request</Button>
+                    <br />
                     {/* Donate section  */}
                     <Card className="Donate">
                         <Card.Body>
@@ -79,13 +89,13 @@ function FullPortray(props) {
                         <img src="https://png.pngtree.com/png-vector/20190625/ourlarge/pngtree-business-male-user-avatar-vector-png-image_1511454.jpg" alt="" />
                     </div>
                     <div className="SocialMedia">
-                        <p>Follow <strong style={{ color: data.vibrant }}>{PortrayData[portrayId].author}</strong> on</p>
+                        <p>Follow <strong style={{ color: data.vibrant }}>{author}</strong> on</p>
                         <div>
-                            <Button variant="light" title="Facebook"><AiFillFacebook style={{ color: data.vibrant }} /></Button>
-                            <Button variant="light" title="Twitter"><AiOutlineTwitter style={{ color: data.vibrant }} /></Button>
-                            <Button variant="light" title="Instagram"><AiFillInstagram style={{ color: data.vibrant }} /></Button>
-                            <Button variant="light" title="Linked-in"><AiFillLinkedin style={{ color: data.vibrant }} /></Button>
-                            <Button variant="light" title="Mail"><AiFillMail style={{ color: data.vibrant }} /></Button>
+                            <Button variant="light" href={Facebook} title="Facebook"><AiFillFacebook style={{ color: data.vibrant }} /></Button>
+                            <Button variant="light" href={Twitter} title="Twitter"><AiOutlineTwitter style={{ color: data.vibrant }} /></Button>
+                            <Button variant="light" href={Instagram} title="Instagram"><AiFillInstagram style={{ color: data.vibrant }} /></Button>
+                            <Button variant="light" href={LinkedIn} title="Linked-in"><AiFillLinkedin style={{ color: data.vibrant }} /></Button>
+                            <Button variant="light" href={"mailto:" + Mail} title="Mail"><AiFillMail style={{ color: data.vibrant }} /></Button>
                         </div>
                     </div>
                 </Container>
