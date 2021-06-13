@@ -40,7 +40,6 @@ function FullPortray(props) {
         }
     }, [UID]);
     // eslint-disable-next-line
-    const { data, loading, error } = usePalette(PortrayData[portrayId].img)
     const { data, loading, error } = usePalette(image)
 
     return (

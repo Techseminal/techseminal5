@@ -3,25 +3,18 @@ import { Navbar, Nav, Button, Modal } from "react-bootstrap";
 import { FaFile, FaSave, FaUserCircle, FaBell, FaCloudUploadAlt, FaGoogle } from 'react-icons/fa'
 import { FiMenu } from 'react-icons/fi'
 import { signInWithGoogle, firestore, signOut } from '../../firebase/firebase-utils'
-
 import './Navbar.scss'
-<<<<<<< HEAD
-import { Navbar, Nav, Button } from "react-bootstrap";
-import { FaFile, FaSave, FaUserCircle, FaBell, FaCloudUploadAlt } from 'react-icons/fa'
-import { FiMenu } from 'react-icons/fi'
-import {withRouter} from 'react-router-dom'
-
-function NavBar(props) {
-
-    const handleUpload = () => {
-        props.history.push('/upload');
-=======
+import { withRouter } from 'react-router-dom'
 
 function NavBar(props) {
     const [users, setusers] = useState([]);
 
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
+
+    const handleUpload = ()=>{
+        props.history.push('/upload')
+    }
 
     useEffect(() => {
         firestore.collection('Users').onSnapshot(querySnapshot => {
@@ -44,7 +37,6 @@ function NavBar(props) {
                     }
                 }
             })
->>>>>>> c4419b2883dee263cbcdc7e286a143942b496cc5
     }
 
     const ProfileModal = (
@@ -64,23 +56,6 @@ function NavBar(props) {
         </Modal>
     );
     return (
-<<<<<<< HEAD
-        <Navbar bg="light" expand="lg" fixed="top" className="Navbar">
-            <Navbar.Brand href="#home" className="NavBrand">Tech Seminal</Navbar.Brand>
-            <Navbar.Toggle aria-controls="basic-navbar-nav" className="NavbarToogle">
-                <FiMenu style={{ fontSize: '24px' }} />
-            </Navbar.Toggle>
-            <Navbar.Collapse id="basic-navbar-nav">
-                <Nav className="ml-auto">
-                    <Nav.Link className="Navlink" href="#MyPosts"><i><FaFile style={{ color: '#00D1CE' }} /></i> My Posts</Nav.Link>
-                    <Nav.Link className="Navlink" href="#Saved"><i><FaSave style={{ color: '#F4C726' }} /></i> Saved</Nav.Link>
-                    <Nav.Link className="Navlink" href="#Profile"><i><FaUserCircle style={{ color: '#007FDC' }} /></i> Profile</Nav.Link>
-                    <Nav.Link className="Navlink" href="#Notifications"><i><FaBell style={{ color: 'tomato' }} /></i> Notifcations</Nav.Link>
-                    <Button onClick={ handleUpload } variant='primary' className="UploadBtn"><FaCloudUploadAlt style={{ marginRight: '5px', fontSize: '18px' }} />upload</Button>
-                </Nav>
-            </Navbar.Collapse>
-        </Navbar>
-=======
         <>
             <Navbar bg="light" expand="lg" fixed="top" className="Navbar">
                 {ProfileModal}
@@ -90,19 +65,20 @@ function NavBar(props) {
                 </Navbar.Toggle>
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="ml-auto">
-                        <Nav.Link className="Navlink" href="#MyPosts"><i><FaFile style={{ color: '#00D1CE' }} /></i> My Posts</Nav.Link>
-                        <Nav.Link className="Navlink" href="#Saved"><i><FaSave style={{ color: '#F4C726' }} /></i> Saved</Nav.Link>
-                        <Nav.Link className="Navlink" href="#Profile"><i><FaUserCircle style={{ color: '#007FDC' }} /></i> Profile</Nav.Link>
-                        <Nav.Link className="Navlink" href="#Notifications"><i><FaBell style={{ color: 'tomato' }} /></i> Notifcations</Nav.Link>
-                        <Button variant='primary' className="UploadBtn"><FaCloudUploadAlt style={{ marginRight: '5px', fontSize: '18px' }} />upload</Button>
-                        {props.user ? <Nav.Link className="UploadBtn" onClick={signOut}><img alt="uIMG" src={props.user.photoURL} height="35" width="35" style={{ borderRadius: '20px' }} /> {props.user.displayName.replace(/\s+/g, '')}</Nav.Link>
+                        {props.user ?
+                            <>
+                                <Nav.Link className="Navlink" href="#MyPosts"><i><FaFile style={{ color: '#00D1CE' }} /></i> My Posts</Nav.Link>
+                                <Nav.Link className="Navlink" href="#Saved"><i><FaSave style={{ color: '#F4C726' }} /></i> Saved</Nav.Link>
+                                <Nav.Link className="Navlink" href="#Profile"><i><FaUserCircle style={{ color: '#007FDC' }} /></i> Profile</Nav.Link>
+                                <Nav.Link className="Navlink" href="#Notifications"><i><FaBell style={{ color: 'tomato' }} /></i> Notifcations</Nav.Link>
+                                <Button variant='primary' className="UploadBtn" onClick={handleUpload}><FaCloudUploadAlt style={{ marginRight: '5px', fontSize: '18px' }} />upload</Button>
+                            </>
                             : <Button variant='primary' className="UploadBtn" onClick={signIn}><FaGoogle style={{ marginRight: '5px', fontSize: '18px' }} />sign in</Button>}
                     </Nav>
                 </Navbar.Collapse>
             </Navbar>
         </>
->>>>>>> c4419b2883dee263cbcdc7e286a143942b496cc5
     )
 }
 
-export default withRouter(NavBar);
+export default withRouter(NavBar)
