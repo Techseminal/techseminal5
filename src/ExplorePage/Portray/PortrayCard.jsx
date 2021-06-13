@@ -23,7 +23,7 @@ function PortrayCard(props) {
                         <p className="Title" onClick={PushId}>{props.title}</p>
                         <div className='Tags'>
                             {props.tags.map(tag => (
-                                <Badge key={tag.index} variant="light" style={{ color: data.vibrant }}>{tag}</Badge>
+                                <Badge key={tag} variant="light" style={{ color: data.vibrant }}>{tag}</Badge>
                             ))}
                         </div>
                     </div>

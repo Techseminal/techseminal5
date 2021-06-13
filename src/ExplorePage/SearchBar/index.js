@@ -23,7 +23,7 @@ function SearchBar() {
                     <Nav.Link className="Tags" title="Developing existing Ideas" href="#Projects">Projects</Nav.Link>
                     <Nav.Link className="Tags" title="Ideas related to business & revenue" href="#BusinessIdea">Business Ideas</Nav.Link>
                     <Nav.Link className="Tags" title="profit or non-profit favours" href="#Service">Service</Nav.Link>
-                    <Nav.Link className="Tags" title="Idea that introduces new technology" href="#Innovation">Innovation</Nav.Link>
+                    <Nav.Link className="Tags" title="Idea that introduces new technology" href="#Invention">Invention</Nav.Link>
                     <Nav.Link className="Tags" title="Concise discp of the problem or issues" href="#ProblemStatement">Problem Statement</Nav.Link>
                 </Nav>
             </Row>

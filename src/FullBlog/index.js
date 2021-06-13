@@ -10,13 +10,12 @@ function FullPortray(props) {
 
     const portrayId = props.match.params.id;
     // eslint-disable-next-line
-    const { data, loading, error } = usePalette(PortrayData[portrayId].image)
+    const { data, loading, error } = usePalette(PortrayData[portrayId].img)
 
     return (
         <>
             <Row className="FullBlog">
                 <Container>
-
                     {/* Header Section */}
                     <header>
                         <div className="UserAvatar" style={{ color: data.vibrant }}>
@@ -61,9 +60,9 @@ function FullPortray(props) {
                             deleniti rem!
                         </p>
                     </article>
-                    <br/>
-                    <Button variant="light" className="TeamRequestBtn" style={{border:`1px solid ${data.vibrant}`}} title="Send team request"><AiOutlineTeam style={{ color: data.vibrant }} />&nbsp;&nbsp;Team request</Button>
-                    <br/>
+                    <br />
+                    <Button variant="light" className="TeamRequestBtn" style={{ border: `1px solid ${data.vibrant}` }} title="Send team request"><AiOutlineTeam style={{ color: data.vibrant }} />&nbsp;&nbsp;Team request</Button>
+                    <br />
                     {/* Donate section  */}
                     <Card className="Donate">
                         <Card.Body>

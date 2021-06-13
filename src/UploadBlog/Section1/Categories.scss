@@ -1,0 +1,16 @@
+@import "../../global.scss";
+
+.Categories {
+    width: 100%;
+    .Dropdown {
+        max-width:500px;
+        .CatLabel {
+            font-size: 30px;
+            font-family: "Poppins", sans-serif;
+            margin: 20px 0;
+        }
+        cite {
+            color: #0083DE;
+        }
+    }
+}
