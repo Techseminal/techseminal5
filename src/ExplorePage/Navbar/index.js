@@ -12,7 +12,7 @@ function NavBar(props) {
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
 
-    const handleUpload = ()=>{
+    const handleUpload = () => {
         props.history.push('/upload')
     }
 
@@ -69,7 +69,7 @@ function NavBar(props) {
                             <>
                                 <Nav.Link className="Navlink" href="#MyPosts"><i><FaFile style={{ color: '#00D1CE' }} /></i> My Posts</Nav.Link>
                                 <Nav.Link className="Navlink" href="#Saved"><i><FaSave style={{ color: '#F4C726' }} /></i> Saved</Nav.Link>
-                                <Nav.Link className="Navlink" href="#Profile"><i><FaUserCircle style={{ color: '#007FDC' }} /></i> Profile</Nav.Link>
+                                <Nav.Link className="Navlink" onClick={signOut}><i><FaUserCircle style={{ color: '#007FDC' }} /></i> Profile</Nav.Link>
                                 <Nav.Link className="Navlink" href="#Notifications"><i><FaBell style={{ color: 'tomato' }} /></i> Notifcations</Nav.Link>
                                 <Button variant='primary' className="UploadBtn" onClick={handleUpload}><FaCloudUploadAlt style={{ marginRight: '5px', fontSize: '18px' }} />upload</Button>
                             </>

@@ -1,24 +1,32 @@
 import React, { useEffect, useState } from 'react'
-import { firestore } from '../firebase/firebase-utils'
+import { firestore, signInWithGoogle } from '../firebase/firebase-utils'
+import { withRouter } from 'react-router'
 import { Container, Image, Row, Button, Card } from 'react-bootstrap'
 import { usePalette } from 'react-palette'
-import { AiOutlineStar, AiOutlineSave, AiOutlineShareAlt, AiFillFacebook, AiOutlineTwitter, AiFillLinkedin, AiFillInstagram, AiFillMail, AiOutlineTeam } from 'react-icons/ai'
+import { AiOutlineStar, AiOutlineSave, AiOutlineShareAlt, AiFillFacebook, AiOutlineTwitter, AiFillStar, AiFillSave, AiOutlineSend, AiFillLinkedin, AiFillInstagram, AiFillMail, AiOutlineTeam } from 'react-icons/ai'
 
 import './FullBlog.scss'
 
 
 function FullPortray(props) {
+    // Current Blog data
     const portrayId = props.match.params.id;
     const [Title, setTitle] = useState('');
     const [discrp, setdiscrp] = useState('');
     const [author, setauthor] = useState('');
     const [image, setimage] = useState('');
+    const [stars, setstars] = useState([]);
+    const [notifications, setnotifications] = useState([]);
+    // current user data
+    const [saved, setsaved] = useState([]);
+    // Author data
     const [UID, setUID] = useState('');
     const [Mail, setMail] = useState('');
     const [Facebook, setFacebook] = useState('');
     const [Instagram, setInstagram] = useState('');
     const [Twitter, setTwitter] = useState('');
     const [LinkedIn, setLinkedIn] = useState('');
+    // current Blog data
     useEffect(() => {
         firestore.collection('Blogs').doc(portrayId).onSnapshot(doc => {
             setTitle(doc.data().title)
@@ -26,8 +34,17 @@ function FullPortray(props) {
             setimage(doc.data().image)
             setauthor(doc.data().author)
             setUID(doc.data().userUID)
+            setstars(doc.data().stars)
+            const notificationsData = doc.data().notifications.map((notification) => {
+                return {
+                    'uid': notification['uid'],
+                    'message': notification['message']
+                }
+            })
+            setnotifications(notificationsData)
         })
     }, [portrayId]);
+    // Author data
     useEffect(() => {
         if (UID !== '') {
             firestore.collection('Users').doc(UID).onSnapshot(doc => {
@@ -39,8 +56,50 @@ function FullPortray(props) {
             })
         }
     }, [UID]);
+    // Current user data
+    useEffect(() => {
+        if (props.user) {
+            firestore.collection('Users').doc(props.user.uid).onSnapshot(doc => {
+                setsaved(doc.data().saved)
+            })
+        }
+    }, [props.user])
     // eslint-disable-next-line
     const { data, loading, error } = usePalette(image)
+
+    function starsHandler() {
+        if (!stars.find((uid) => uid === props.user.uid)) {
+            stars.push(props.user.uid)
+        }
+        else {
+            stars.pop(props.user.uid)
+        }
+        firestore.collection('Blogs').doc(portrayId).update({
+            'stars': stars
+        })
+    }
+
+    function savedHandler() {
+        if (!saved.find((postID) => postID === portrayId)) {
+            saved.push(portrayId)
+        }
+        else {
+            saved.pop(portrayId)
+        }
+        firestore.collection('Users').doc(UID).update({
+            'saved': saved
+        })
+    }
+
+    function teamRequestHandler() {
+        notifications.push({
+            'uid': props.user.uid,
+            'message': 'I want to join with you'
+        })
+        firestore.collection('Blogs').doc(portrayId).update({
+            'notifications': notifications
+        })
+    }
 
     return (
         <>
@@ -56,8 +115,10 @@ function FullPortray(props) {
                             </div>
                         </div>
                         <div className="Actions">
-                            <Button variant="light" style={{ color: data.vibrant }}><AiOutlineStar />&nbsp; &nbsp;Star</Button>
-                            <Button variant="light" style={{ color: data.vibrant }}><AiOutlineSave /></Button>
+                            <Button variant="light" style={{ color: data.vibrant }} onClick={props.user ? starsHandler : signInWithGoogle}>
+                                {props.user ? stars.find((uid) => uid === props.user.uid) ? <div><AiFillStar />&nbsp;&nbsp;{stars.length}</div> : <div><AiOutlineStar />&nbsp;&nbsp;Star</div> : <div><AiOutlineStar />&nbsp;&nbsp;Star</div>}
+                            </Button>
+                            <Button variant="light" style={{ color: data.vibrant }} onClick={props.user ? savedHandler : signInWithGoogle}>{saved.find((postID) => postID === portrayId) ? <AiFillSave /> : <AiOutlineSave />}</Button>
                             <Button variant="light" style={{ color: data.vibrant }}><AiOutlineShareAlt /></Button>
                         </div>
                     </header>
@@ -71,7 +132,12 @@ function FullPortray(props) {
                         </p>
                     </article>
                     <br />
-                    <Button variant="light" className="TeamRequestBtn" style={{ border: `1px solid ${data.vibrant}` }} title="Send team request"><AiOutlineTeam style={{ color: data.vibrant }} />&nbsp;&nbsp;Team request</Button>
+                    <Button variant="light" className="TeamRequestBtn" style={{ border: `1px solid ${data.vibrant}` }} title="Send team request" onClick={props.user ? notifications.find((notification) => notification['uid'] === props.user.uid) ? null : teamRequestHandler : signInWithGoogle}>
+                        {props.user ? notifications.find((notification) => notification['uid'] === props.user.uid) ?
+                            <div><AiOutlineSend style={{ color: data.vibrant }} />&nbsp;&nbsp;Requested</div>
+                            : <div><AiOutlineTeam style={{ color: data.vibrant }} />&nbsp;&nbsp;Team request</div> 
+                            : <div><AiOutlineTeam style={{ color: data.vibrant }} />&nbsp;&nbsp;Team request</div>}
+                    </Button>
                     <br />
                     {/* Donate section  */}
                     <Card className="Donate">
@@ -90,11 +156,11 @@ function FullPortray(props) {
                     <div className="SocialMedia">
                         <p>Follow <strong style={{ color: data.vibrant }}>{author}</strong> on</p>
                         <div>
-                            <Button variant="light" href={Facebook} title="Facebook"><AiFillFacebook style={{ color: data.vibrant }} /></Button>
-                            <Button variant="light" href={Twitter} title="Twitter"><AiOutlineTwitter style={{ color: data.vibrant }} /></Button>
-                            <Button variant="light" href={Instagram} title="Instagram"><AiFillInstagram style={{ color: data.vibrant }} /></Button>
-                            <Button variant="light" href={LinkedIn} title="Linked-in"><AiFillLinkedin style={{ color: data.vibrant }} /></Button>
-                            <Button variant="light" href={"mailto:" + Mail} title="Mail"><AiFillMail style={{ color: data.vibrant }} /></Button>
+                            <a href={Facebook} target="_blank" rel="noreferrer"><Button variant="light" title="Facebook"><AiFillFacebook style={{ color: data.vibrant }} /></Button></a>
+                            <a href={Twitter} target="_blank" rel="noreferrer"><Button variant="light" title="Twitter"><AiOutlineTwitter style={{ color: data.vibrant }} /></Button></a>
+                            <a href={Instagram} target="_blank" rel="noreferrer"><Button variant="light" title="Instagram"><AiFillInstagram style={{ color: data.vibrant }} /></Button></a>
+                            <a href={LinkedIn} target="_blank" rel="noreferrer"><Button variant="light" title="Linked-in"><AiFillLinkedin style={{ color: data.vibrant }} /></Button></a>
+                            <a href={"mailto:" + Mail}><Button variant="light" title="Mail"><AiFillMail style={{ color: data.vibrant }} /></Button></a>
                         </div>
                     </div>
                 </Container>
@@ -103,4 +169,4 @@ function FullPortray(props) {
     )
 }
 
-export default FullPortray
+export default withRouter(FullPortray);
