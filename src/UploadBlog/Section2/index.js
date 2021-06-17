@@ -1,12 +1,16 @@
 import React from 'react'
 import { Form, Container, InputGroup, FormControl, Button, Badge } from 'react-bootstrap'
+import { AiFillCloseCircle } from 'react-icons/ai'
+import TextEditor from './TextEditor.jsx'
 
 function Section2({ title, discp, tags, HdTitle, HdDiscp, HdTags }) {
 
     const handleTags = () => {
         let value = document.getElementById("tagField").value
-        HdTags([...tags, value]);
-        document.getElementById("tagField").value = "";
+        if(value !== ''){
+            HdTags([...tags, value]);
+            document.getElementById("tagField").value = "";
+        }
     }
 
     const delTag = (value) => {
@@ -26,25 +30,31 @@ function Section2({ title, discp, tags, HdTitle, HdDiscp, HdTags }) {
                 <Form.Group controlId="exampleForm.ControlTextarea1">
                     <Form.Label style={{ fontFamily: 'Poppins', fontSize: '18px', color: '#007EDB' }}>Desciption</Form.Label>&nbsp;&nbsp;
                     <cite style={{ color: 'gray', fontSize: '12px' }}>Minimum of 500 characters</cite>
-                    <Form.Control as="textarea" onChange={e => HdDiscp(e.target.value)} value={discp} rows={10} placeholder="describe your idea..." />
+                    {/* riche text editor */}
+                    <TextEditor discp={discp} HdDiscp={HdDiscp} />
                 </Form.Group>
                 <br />
-                <Form.Label style={{ fontFamily: 'Poppins', fontSize: '18px', color: '#007EDB' }}>Add Tags</Form.Label>
-                <InputGroup className="mb-3">
-                    <FormControl
-                        placeholder="Enter Tags one by one.."
-                        aria-label="Enter Tags one by one.."
-                        aria-describedby="basic-addon2"
-                        id="tagField"
-                    />
-                    <InputGroup.Append>
-                        <Button onClick={handleTags} variant="outline-primary" style={{ padding: '5px 20px' }}>Add</Button>
-                    </InputGroup.Append>
-                </InputGroup>
+
+                {/* Tags */}
+                <Form.Group>
+                    <Form.Label style={{ fontFamily: 'Poppins', fontSize: '18px', color: '#007EDB' }}>Add Tags</Form.Label>&nbsp;&nbsp;
+                    <cite style={{ color: 'gray', fontSize: '12px' }}>Mostly use suggested tags (min 2 tags)</cite>
+                    <InputGroup className="mb-3">
+                        <FormControl
+                            placeholder="Enter Tags one by one.."
+                            aria-label="Enter Tags one by one.."
+                            aria-describedby="basic-addon2"
+                            id="tagField"
+                        />
+                        <InputGroup.Append>
+                            <Button type='submit'  onClick={(e) => { e.preventDefault(); handleTags(); }} variant="outline-primary" style={{ padding: '5px 20px' }}>Add</Button>
+                        </InputGroup.Append>
+                    </InputGroup>
+                </Form.Group>
                 {
                     tags.map(tag => (
-                        <Badge key={tag} style={{ marginRight: '10px', cursor: 'pointer' }} onClick={() => delTag(tag)} title='onClick delete tag' pill variant="dark">
-                            {tag}
+                        <Badge key={tag} style={{ marginRight: '10px', fontSize: '14px' }} pill variant="dark">
+                            <AiFillCloseCircle style={{ cursor: 'pointer' }} title='onClick delete tag' onClick={() => delTag(tag)} />&nbsp;{tag}
                         </Badge>
                     ))
                 }

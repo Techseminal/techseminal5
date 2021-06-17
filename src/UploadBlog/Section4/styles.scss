@@ -1,0 +1,36 @@
+@import '../../global.scss';
+
+.Categories {
+    margin:50px 5px;
+    .TagesMenu {
+        display:block;
+        &::-webkit-scrollbar {
+           height:2px;
+        }
+        &::-webkit-scrollbar-thumb {
+            background: #d2ebee;
+            border-radius: 25px;
+          }
+        @media screen and (max-width:992px){
+            overflow-x:auto;
+            white-space: nowrap;
+            padding-bottom: 10px;
+        }
+        .Tags {
+            margin: 0 10px;
+            display: inline-block;
+            transition: ease-in 0.2s;
+            color: gray;
+            @media screen and (max-width:992px){
+                margin:5px;
+            }
+            &.active {
+                background-color: #268FFF;
+                border-radius: 10px;
+                padding: 10px 20px;
+                color: #fff;
+                font-weight: 600;
+            }
+        }
+    }
+}

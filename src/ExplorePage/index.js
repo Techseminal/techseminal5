@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react'
-import { auth } from '../firebase/firebase-utils';
+import React from 'react'
 
 import Navbar from './Navbar'
 import Banner from './Banner'
@@ -8,16 +7,10 @@ import Portray from '../ExplorePage/Portray'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './ExplorePage.scss'
 
-function ExplorePage() {
-    const [user, setuser] = useState(null);
-    useEffect(() => {
-        auth.onAuthStateChanged((user) => {
-            setuser(user)
-        })
-    });
+function ExplorePage(props) {
     return (
         <div className="ExplorePage">
-            <Navbar user={user}/>
+            <Navbar user={props.user} />
             <Banner />
             <SearchBar />
             <Portray />
@@ -26,4 +19,3 @@ function ExplorePage() {
 }
 
 export default ExplorePage;
-
