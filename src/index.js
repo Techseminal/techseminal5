@@ -37,7 +37,7 @@ function App() {
   return (
     <Switch>
       <Route path='/' exact render={() => <ExplorePage user={user} saved={saved} />} />
-      <Route path="/upload" exact component={UploadBlog} />
+      <Route path="/upload" exact render={() => <UploadBlog user={user}/>}/>
       <Route path="/:id" exact render={() => <FullBlog user={user} saved={saved} />} />
     </Switch>
   )

@@ -21,7 +21,6 @@ function SearchBar(props) {
             })
             tags = tags.reduce((elem1, elem2) => elem1.concat(elem2))
             tags = [...new Set(tags)]
-            tags = tags.slice(0,7)
             settags(tags)
         })
     }, []);

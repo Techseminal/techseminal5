@@ -55,14 +55,6 @@ function FullPortray(props) {
             })
         }
     }, [UID]);
-    // Current user data
-    useEffect(() => {
-        if (props.user) {
-            firestore.collection('Users').doc(props.user.uid).onSnapshot(doc => {
-                setsaved(doc.data().saved)
-            })
-        }
-    }, [props.user])
     // eslint-disable-next-line
     const { data, loading, error } = usePalette(image)
 
