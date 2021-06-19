@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { firestore, signInWithGoogle } from '../firebase/firebase-utils'
 import { withRouter } from 'react-router'
-import { Container, Image, Row, Button, Card } from 'react-bootstrap'
+import { Container, Image, Row, Button, Card, Badge } from 'react-bootstrap'
 import { usePalette } from 'react-palette'
 import { AiOutlineStar, AiOutlineSave, AiOutlineShareAlt, AiFillFacebook, AiOutlineTwitter, AiFillStar, AiFillSave, AiOutlineSend, AiFillLinkedin, AiFillInstagram, AiFillMail, AiOutlineTeam } from 'react-icons/ai'
 
 import './FullBlog.scss'
-
 
 function FullPortray(props) {
     // Current Blog data
@@ -17,6 +16,7 @@ function FullPortray(props) {
     const [image, setimage] = useState('');
     const [stars, setstars] = useState([]);
     const [notifications, setnotifications] = useState([]);
+    const [tags, setTags] = useState([]);
     // Author data
     const [UID, setUID] = useState('');
     const [Mail, setMail] = useState('');
@@ -33,6 +33,7 @@ function FullPortray(props) {
             setauthor(doc.data().author)
             setUID(doc.data().userUID)
             setstars(doc.data().stars)
+            setTags(doc.data().tags)
             const notificationsData = doc.data().notifications.map((notification) => {
                 return {
                     'uid': notification['uid'],
@@ -54,6 +55,14 @@ function FullPortray(props) {
             })
         }
     }, [UID]);
+    // Current user data
+    useEffect(() => {
+        if (props.user) {
+            firestore.collection('Users').doc(props.user.uid).onSnapshot(doc => {
+                setsaved(doc.data().saved)
+            })
+        }
+    }, [props.user])
     // eslint-disable-next-line
     const { data, loading, error } = usePalette(image)
 
@@ -117,15 +126,16 @@ function FullPortray(props) {
                     <article>
                         <Image fluid className="CoverPhoto" src={image} alt="" />
                         <p className="Title"><u>{Title}</u></p>
-                        <p className="descrip">
-                            {discrp}
-                        </p>
+                        <div dangerouslySetInnerHTML={{__html: discrp}} />
+                        {tags.map(tag => (
+                            <Badge key={tag} variant="light" style={{ color: data.vibrant, fontSize:'16px', marginRight:'10px' }}>{tag}</Badge>
+                        ))}
                     </article>
                     <br />
                     <Button variant="light" className="TeamRequestBtn" style={{ border: `1px solid ${data.vibrant}` }} title="Send team request" onClick={props.user ? notifications.find((notification) => notification['uid'] === props.user.uid) ? null : teamRequestHandler : signInWithGoogle}>
                         {props.user ? notifications.find((notification) => notification['uid'] === props.user.uid) ?
                             <div><AiOutlineSend style={{ color: data.vibrant }} />&nbsp;&nbsp;Requested</div>
-                            : <div><AiOutlineTeam style={{ color: data.vibrant }} />&nbsp;&nbsp;Team request</div> 
+                            : <div><AiOutlineTeam style={{ color: data.vibrant }} />&nbsp;&nbsp;Team request</div>
                             : <div><AiOutlineTeam style={{ color: data.vibrant }} />&nbsp;&nbsp;Team request</div>}
                     </Button>
                     <br />

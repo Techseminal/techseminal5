@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import ReactDOM from 'react-dom';
+
 import { BrowserRouter as Router } from 'react-router-dom'
 
 import { Switch, Route } from 'react-router-dom';
@@ -11,11 +12,9 @@ import UploadBlog from './UploadBlog'
 
 
 ReactDOM.render(
-  <React.StrictMode>
-    <Router>
-      <App />
-    </Router>
-  </React.StrictMode>,
+  <Router>
+    <App />
+  </Router>,
   document.getElementById('root')
 );
 

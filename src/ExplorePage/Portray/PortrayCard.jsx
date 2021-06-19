@@ -57,7 +57,7 @@ function PortrayCard(props) {
                     </div>
                     <footer>
                         <div className="UserAvatar">
-                            <img src="https://png.pngtree.com/png-vector/20190625/ourlarge/pngtree-business-male-user-avatar-vector-png-image_1511454.jpg" style={{ border: `2px solid ${data.vibrant}` }} alt="" height="24px" />
+                            <img src="https://png.pngtree.com/png-vector/20190625/ourlarge/pngtree-business-male-user-avatar-vector-png-image_1511454.jpg" style={{border:`2px solid ${data.vibrant}`,padding:'2px',width:'32px',height:'32px'}} alt="" />
                             <p>{props.author}</p>
                         </div>
                         <div className="RightSide">

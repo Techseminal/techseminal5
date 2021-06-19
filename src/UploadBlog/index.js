@@ -6,44 +6,69 @@ import Section2 from './Section2'
 import Section3 from './Section3'
 import Section4 from './Section4'
 import Post from './Post'
+import { firestore as db } from '../firebase/firebase-utils'
+import {withRouter} from 'react-router-dom'
 
-function UploadBlog() {
+function UploadBlog(props) {
 
     const [Category, setCategory] = useState("Choose...")
-    const [Title, setTitle] = useState("google")
-    const [Discrip, setDiscrip] = useState("hslkd")
-    const [Tags, setTags] = useState(["tags","folloe",'hello'])
+    const [Title, setTitle] = useState("")
+    const [Discrip, setDiscrip] = useState("<p></p>")
+    const [Tags, setTags] = useState([])
     const [CPhoto, setCPhoto] = useState(null)
     // eslint-disable-next-line
-    const [Status, setStatus] = useState("Ideation")
+    const [Status, setStatus] = useState(null)
 
     const [Progress, setProgress] = useState(20);
 
-    const handleCategory = (value) => {setCategory(value);}
-    const handleTitle = (value) => {setTitle(value);}
-    const handleDiscrip = (value) => {setDiscrip(value);}
-    const handleTags = (value) => {setTags(value);}
-    const handleCPhoto = (value) => {setCPhoto(value);}
-    
+    const handleCategory = (value) => { setCategory(value); }
+    const handleTitle = (value) => { setTitle(value); }
+    const handleDiscrip = (value) => { setDiscrip(value); }
+    const handleTags = (value) => { setTags(value); }
+    const handleCPhoto = (value) => { setCPhoto(value); }
+    const handleStatus = (value) => { setStatus(value); }
+
     // checking next Btn condition
     useEffect(() => {
         // eslint-disable-next-line
-        if (Progress === 20 && Category !== "Choose..." || Progress === 40 && Title !== "" && Discrip !== "" && Tags.length >= 3 || Progress === 60 && CPhoto !== null) {
+        if (Progress === 20 && Category !== "Choose..." || Progress === 40 && Title !== "" && Discrip.length >= 10 && Tags.length >= 2 || Progress === 60 && CPhoto !== null || Progress === 80 && Status !== null && Progress !== 100) {
             document.getElementById("nextBtn").style.display = "block"
         } else {
             document.getElementById("nextBtn").style.display = "none"
         }
-    }, [Title,Discrip,Tags,Progress,Category,CPhoto])
+    }, [Title, Discrip, Tags, Progress, Category, CPhoto, Status])
+
+    const UploadArticle = () => {
+        // Add a new document in collection "cities"
+        db.collection("Blogs").doc().set({
+            author:props.user.displayName,
+            userUID:props.user.uid,
+            category: Category,
+            title:Title,
+            discrp:Discrip,
+            image:CPhoto,
+            notifications:[],
+            stars:[],
+            tags:Tags,
+            timestamp:Date.now()
+        })
+            .then(() => {
+                console.log("Document successfully written!");
+            })
+            .catch((error) => {
+                console.error("Error writing document: ", error);
+            });
+    }
 
     return (
-        <>
+        <div style={{ overflowX: 'hidden' }}>
             <ProgressBar style={{ height: '5px' }} animated now={Progress} />
             <AiOutlineClose
-                onClick={() => window.history.back()}
+                onClick={() => props.history.push('/')}
                 title="Close Upload"
                 style={{ margin: '20px', float: 'right', fontSize: '24px', color: 'gray', cursor: 'pointer', }}
             />
-            <div style={{ margin:'100px 0', width: '100% aut0'}}>
+            <div style={{ margin: '100px 0', width: '100% aut0' }}>
                 {
                     Progress === 20 ?
                         <center><Section1 category={Category} CallBack={handleCategory} /></center>
@@ -52,17 +77,17 @@ function UploadBlog() {
                             <Section2 title={Title} discp={Discrip} tags={Tags} HdTitle={handleTitle} HdDiscp={handleDiscrip} HdTags={handleTags} />
                             :
                             Progress === 60 ?
-                                <Section3 cphoto={CPhoto} HdImage={handleCPhoto}/>
+                                <Section3 cphoto={CPhoto} HdImage={handleCPhoto} />
                                 :
                                 Progress === 80 ?
-                                    <Section4 status={Status} />
+                                    <Section4 status={Status} HdStatus={handleStatus} />
                                     :
                                     Progress === 100 ?
-                                        <Post />
+                                        <Post title={Title} discp={Discrip} Cphoto={CPhoto} tags={Tags} />
                                         : null
                 }
             </div>
-            <Container style={{marginBottom:'100px'}}>
+            <Container style={{ marginBottom: '100px' }}>
                 {
                     Progress !== 20 ?
                         <Button onClick={() => setProgress(Progress - 20)} variant='light' style={{ border: '1px solid #007BFF', fontSize: '18px', padding: '5px 30px', borderRadius: '25px' }}>Previous</Button>
@@ -70,13 +95,13 @@ function UploadBlog() {
                 }
                 {
                     Progress === 100 ?
-                        <Button id="uploadBtn" variant="primary" style={{ fontSize: '18px', padding: '5px 30px', borderRadius: '25px', display: 'none', float: 'right' }}>Next</Button>
+                        <Button onClick={UploadArticle} id="uploadBtn" variant="success" style={{ fontSize: '18px', padding: '5px 30px', borderRadius: '25px', float: 'right' }}>Upload</Button>
                         : null
                 }
                 <Button onClick={() => setProgress(Progress + 20)} id="nextBtn" variant="primary" style={{ fontSize: '18px', padding: '5px 30px', borderRadius: '25px', display: 'none', float: 'right' }}>Next</Button>
             </Container>
-        </>
+        </div>
     )
 }
 
-export default UploadBlog
+export default withRouter(UploadBlog)

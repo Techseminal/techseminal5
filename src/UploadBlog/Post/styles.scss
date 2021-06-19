@@ -1,0 +1,26 @@
+@import '../../global.scss';
+
+article {
+    margin-top: 20px;
+    .CoverPhoto {
+        border-radius: 20px;
+    }
+    .Title {
+        font-size: 25px;
+        font-family: "Poppins", sans-serif;
+        margin: 30px 0;
+        font-weight: 800;
+        @media screen and (max-width:765px) {
+            font-size: 20px;
+        }
+    }
+    .descrip{
+        color:rgb(85, 83, 83);
+        font-size: 16px;
+        letter-spacing: 0.5px;
+        line-height: 25px;
+        @media screen and (max-width:575px) {
+            font-size: 14px;
+        }
+    }
+}
