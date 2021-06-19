@@ -17,8 +17,6 @@ function FullPortray(props) {
     const [image, setimage] = useState('');
     const [stars, setstars] = useState([]);
     const [notifications, setnotifications] = useState([]);
-    // current user data
-    const [saved, setsaved] = useState([]);
     // Author data
     const [UID, setUID] = useState('');
     const [Mail, setMail] = useState('');
@@ -56,14 +54,6 @@ function FullPortray(props) {
             })
         }
     }, [UID]);
-    // Current user data
-    useEffect(() => {
-        if (props.user) {
-            firestore.collection('Users').doc(props.user.uid).onSnapshot(doc => {
-                setsaved(doc.data().saved)
-            })
-        }
-    }, [props.user])
     // eslint-disable-next-line
     const { data, loading, error } = usePalette(image)
 
@@ -80,14 +70,14 @@ function FullPortray(props) {
     }
 
     function savedHandler() {
-        if (!saved.find((postID) => postID === portrayId)) {
-            saved.push(portrayId)
+        if (!props.saved.find((postID) => postID === portrayId)) {
+            props.saved.push(portrayId)
         }
         else {
-            saved.pop(portrayId)
+            props.saved.pop(portrayId)
         }
-        firestore.collection('Users').doc(UID).update({
-            'saved': saved
+        firestore.collection('Users').doc(props.user.uid).update({
+            'saved': props.saved
         })
     }
 
@@ -118,7 +108,7 @@ function FullPortray(props) {
                             <Button variant="light" style={{ color: data.vibrant }} onClick={props.user ? starsHandler : signInWithGoogle}>
                                 {props.user ? stars.find((uid) => uid === props.user.uid) ? <div><AiFillStar />&nbsp;&nbsp;{stars.length}</div> : <div><AiOutlineStar />&nbsp;&nbsp;Star</div> : <div><AiOutlineStar />&nbsp;&nbsp;Star</div>}
                             </Button>
-                            <Button variant="light" style={{ color: data.vibrant }} onClick={props.user ? savedHandler : signInWithGoogle}>{saved.find((postID) => postID === portrayId) ? <AiFillSave /> : <AiOutlineSave />}</Button>
+                            <Button variant="light" style={{ color: data.vibrant }} onClick={props.user ? savedHandler : signInWithGoogle}>{props.saved.find((postID) => postID === portrayId) ? <AiFillSave /> : <AiOutlineSave />}</Button>
                             <Button variant="light" style={{ color: data.vibrant }}><AiOutlineShareAlt /></Button>
                         </div>
                     </header>
