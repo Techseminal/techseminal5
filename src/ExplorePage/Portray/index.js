@@ -2,12 +2,14 @@ import React, { useState, useEffect } from 'react'
 import { Col, Row } from 'react-bootstrap'
 import { firestore } from '../../firebase/firebase-utils'
 import PortrayCard from './PortrayCard'
-
+import Loader from '../../components/Loader'
 import './Portray.scss'
 
 function Portray() {
     const [Blogs, setBlogs] = useState([]);
+    const [loader,setLoader] = useState(false)
     useEffect(() => {
+        setLoader(true)
         firestore.collection('Blogs').onSnapshot(querySnapshot => {
             const blogs = querySnapshot.docs.map((doc) => {
                 return {
@@ -16,10 +18,14 @@ function Portray() {
                 }
             })
             setBlogs(blogs);
+            setLoader(false)
         })
     }, []);
     return (
         <Row className="Portray">
+            {
+                loader ? <Loader/> : null
+            }
             <Col className="ColPortray">
                 {
                     Blogs.map(blog => (

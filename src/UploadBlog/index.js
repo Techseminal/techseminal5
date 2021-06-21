@@ -7,9 +7,13 @@ import Section3 from './Section3'
 import Section4 from './Section4'
 import Post from './Post'
 import { firestore as db } from '../firebase/firebase-utils'
-import {withRouter} from 'react-router-dom'
+import { withRouter } from 'react-router-dom'
+import Loader from '../components/Loader'
 
 function UploadBlog(props) {
+
+    // Loder
+    const [loader, setLoader] = useState(false)
 
     const [Category, setCategory] = useState("Choose...")
     const [Title, setTitle] = useState("")
@@ -39,21 +43,24 @@ function UploadBlog(props) {
     }, [Title, Discrip, Tags, Progress, Category, CPhoto, Status])
 
     const UploadArticle = () => {
+        setLoader(true)
         // Add a new document in collection "cities"
         db.collection("Blogs").doc().set({
-            author:props.user.displayName,
-            userUID:props.user.uid,
+            author: props.user.displayName,
+            userUID: props.user.uid,
             category: Category,
-            title:Title,
-            discrp:Discrip,
-            image:CPhoto,
-            notifications:[],
-            stars:[],
-            tags:Tags,
-            timestamp:Date.now()
+            title: Title,
+            discrp: Discrip,
+            image: CPhoto,
+            notifications: [],
+            stars: [],
+            tags: Tags,
+            timestamp: Date.now()
         })
             .then(() => {
-                console.log("Document successfully written!");
+                setLoader(false);
+                window.alert('uploaded successfully')
+                props.history.push('/')
             })
             .catch((error) => {
                 console.error("Error writing document: ", error);
@@ -61,46 +68,49 @@ function UploadBlog(props) {
     }
 
     return (
-        <div style={{ overflowX: 'hidden' }}>
-            <ProgressBar style={{ height: '5px' }} animated now={Progress} />
-            <AiOutlineClose
-                onClick={() => props.history.push('/')}
-                title="Close Upload"
-                style={{ margin: '20px', float: 'right', fontSize: '24px', color: 'gray', cursor: 'pointer', }}
-            />
-            <div style={{ margin: '100px 0', width: '100% aut0' }}>
-                {
-                    Progress === 20 ?
-                        <center><Section1 category={Category} CallBack={handleCategory} /></center>
-                        :
-                        Progress === 40 ?
-                            <Section2 title={Title} discp={Discrip} tags={Tags} HdTitle={handleTitle} HdDiscp={handleDiscrip} HdTags={handleTags} />
+        <>
+            {loader ? <Loader /> : null}
+            <div style={{ overflowX: 'hidden' }}>
+                <ProgressBar style={{ height: '5px' }} animated now={Progress} />
+                <AiOutlineClose
+                    onClick={() => props.history.push('/')}
+                    title="Close Upload"
+                    style={{ margin: '20px', float: 'right', fontSize: '24px', color: 'gray', cursor: 'pointer', }}
+                />
+                <div style={{ margin: '100px 0', width: '100% aut0' }}>
+                    {
+                        Progress === 20 ?
+                            <center><Section1 category={Category} CallBack={handleCategory} /></center>
                             :
-                            Progress === 60 ?
-                                <Section3 cphoto={CPhoto} HdImage={handleCPhoto} />
+                            Progress === 40 ?
+                                <Section2 title={Title} discp={Discrip} tags={Tags} HdTitle={handleTitle} HdDiscp={handleDiscrip} HdTags={handleTags} />
                                 :
-                                Progress === 80 ?
-                                    <Section4 status={Status} HdStatus={handleStatus} />
+                                Progress === 60 ?
+                                    <Section3 cphoto={CPhoto} HdImage={handleCPhoto} />
                                     :
-                                    Progress === 100 ?
-                                        <Post title={Title} discp={Discrip} Cphoto={CPhoto} tags={Tags} />
-                                        : null
-                }
+                                    Progress === 80 ?
+                                        <Section4 status={Status} HdStatus={handleStatus} />
+                                        :
+                                        Progress === 100 ?
+                                            <Post title={Title} discp={Discrip} Cphoto={CPhoto} tags={Tags} />
+                                            : null
+                    }
+                </div>
+                <Container style={{ marginBottom: '100px' }}>
+                    {
+                        Progress !== 20 ?
+                            <Button onClick={() => setProgress(Progress - 20)} variant='light' style={{ border: '1px solid #007BFF', fontSize: '18px', padding: '5px 30px', borderRadius: '25px' }}>Previous</Button>
+                            : null
+                    }
+                    {
+                        Progress === 100 ?
+                            <Button onClick={UploadArticle} id="uploadBtn" variant="success" style={{ fontSize: '18px', padding: '5px 30px', borderRadius: '25px', float: 'right' }}>Upload</Button>
+                            : null
+                    }
+                    <Button onClick={() => setProgress(Progress + 20)} id="nextBtn" variant="primary" style={{ fontSize: '18px', padding: '5px 30px', borderRadius: '25px', display: 'none', float: 'right' }}>Next</Button>
+                </Container>
             </div>
-            <Container style={{ marginBottom: '100px' }}>
-                {
-                    Progress !== 20 ?
-                        <Button onClick={() => setProgress(Progress - 20)} variant='light' style={{ border: '1px solid #007BFF', fontSize: '18px', padding: '5px 30px', borderRadius: '25px' }}>Previous</Button>
-                        : null
-                }
-                {
-                    Progress === 100 ?
-                        <Button onClick={UploadArticle} id="uploadBtn" variant="success" style={{ fontSize: '18px', padding: '5px 30px', borderRadius: '25px', float: 'right' }}>Upload</Button>
-                        : null
-                }
-                <Button onClick={() => setProgress(Progress + 20)} id="nextBtn" variant="primary" style={{ fontSize: '18px', padding: '5px 30px', borderRadius: '25px', display: 'none', float: 'right' }}>Next</Button>
-            </Container>
-        </div>
+        </>
     )
 }
 

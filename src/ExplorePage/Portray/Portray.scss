@@ -22,7 +22,7 @@
     margin: 30px;
     box-shadow: 5px 5px 10px 5px rgba(0, 0, 0, 0.1);
     transition: ease-in 0.1s;
-    &:hover{
+    &:hover {
         box-shadow: 20px 20px 50px 20px rgba(0, 0, 0, 0.1);
     }
     @media screen and (max-width: 500px) {
@@ -30,22 +30,23 @@
     }
     .Title {
         font-weight: 600;
-        color:rgb(129, 129, 129);
+        color: rgb(129, 129, 129);
         font-size: 14px;
         margin-bottom: 0;
+        min-height: 50px;
     }
-    .Tags{
+    .Tags {
         display: block;
-        overflow-x:auto;
+        overflow-x: auto;
         white-space: nowrap;
-        margin-bottom: 10px; 
+        margin-bottom: 10px;
         &::-webkit-scrollbar {
-            height:0;
-         } 
-        span{
-            margin-right:5px;
+            height: 0;
+        }
+        span {
+            margin-right: 5px;
             display: inline-block;
-        }     
+        }
     }
     footer {
         display: flex;
@@ -73,14 +74,14 @@
             font-size: 20px;
             @media screen and (max-width: 500px) {
                 font-size: 18px;
-                margin:5px 0;
+                margin: 5px 0;
             }
-            button{
+            button {
                 font-size: 14px;
                 @media screen and (max-width: 500px) {
                     font-size: 12px;
                 }
-                i{
+                i {
                     font-size: 20px;
                 }
             }
