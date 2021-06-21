@@ -31,9 +31,31 @@ function NavBar(props) {
             .then((result) => {
                 if (result.user) {
                     if (users.find((user) => user === result.user.uid)) {
-                        setShow(false);
+                        firestore.collection('Users').doc(result.user.uid).onSnapshot(querySnapshot => {
+                            const userProfile = {
+                                ...querySnapshot.data()
+                            }
+                            if(userProfile.username === '' && userProfile.bio === '') {
+                                setShow(true);
+                            }
+                            else {
+                                setShow(false);
+                            }
+                        })
+                        console.log(result.user)
                     }
                     else {
+                        firestore.collection('Users').doc(result.user.uid).set({
+                            'username': '',
+                            'bio': '',
+                            'mail': result.user.email,
+                            'facebook': '',
+                            'instagram': '',
+                            'twiiter': '',
+                            'linkedIn': '',
+                            'profileImgUrl': result.user.photoURL,
+                            'saved': [],
+                        })
                         setShow(true);
                     }
                 }
