@@ -8,6 +8,7 @@ import { withRouter } from 'react-router-dom'
 
 function NavBar(props) {
     const [users, setusers] = useState([]);
+    const [isUnique, setisUnique] = useState(false);
 
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
@@ -19,7 +20,10 @@ function NavBar(props) {
     useEffect(() => {
         firestore.collection('Users').onSnapshot(querySnapshot => {
             const users = querySnapshot.docs.map((doc) => {
-                return doc.id
+                return {
+                    id: doc.id,
+                    name: doc.data().username
+                }
             })
             setusers(users);
         })
@@ -34,18 +38,28 @@ function NavBar(props) {
                             const userProfile = {
                                 ...querySnapshot.data()
                             }
-                            if(userProfile.username === '' && userProfile.bio === '') {
+                            if(userProfile.bio === '') {
                                 setShow(true);
                             }
                             else {
                                 setShow(false);
                             }
                         })
-                        console.log(result.user)
                     }
                     else {
+                        let username = ''
+                        if(!users.find((user) => user.name ===  result.user.displayName)) {
+                            username = result.user.displayName
+                            setisUnique(true)
+                            console.log('unique')
+                        }
+                        else {
+                            username = ''
+                            setisUnique(false)
+                            console.log('Not unique')
+                        }
                         firestore.collection('Users').doc(result.user.uid).set({
-                            'username': '',
+                            'username': username,
                             'bio': '',
                             'mail': result.user.email,
                             'facebook': '',
@@ -68,9 +82,9 @@ function NavBar(props) {
             </Modal.Header>
             <Modal.Body>Fill your details and set up your profile</Modal.Body>
             <Modal.Footer>
-                <Button variant="secondary" onClick={handleClose}>
+                {isUnique ? <Button variant="secondary" onClick={handleClose}>
                     Skip For Now
-                </Button>
+                </Button> : null}
                 <Button variant="primary" onClick={handleClose}>
                     Continue
                 </Button>

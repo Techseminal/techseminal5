@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import ReactDOM from 'react-dom';
-
 import { BrowserRouter as Router } from 'react-router-dom'
 
 import { Switch, Route } from 'react-router-dom';
 import { auth, firestore } from './firebase/firebase-utils';
-
 import ExplorePage from './ExplorePage';
 import FullBlog from './FullBlog'
 import UploadBlog from './UploadBlog'
