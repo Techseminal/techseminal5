@@ -1,0 +1,57 @@
+@import "../global.scss";
+
+.inputField {
+    border-radius: 5px;
+    padding: 5px;
+    width: 100%;
+    border: 1px solid rgb(240, 239, 239);
+    &:focus {
+        outline-color: #d1e5fa;
+        border: none;
+    }
+}
+.Section1, .EditProfile {
+    .photoURL {
+        border-radius: 50%;
+        width: 125px;
+    }
+    .editbtn {
+        outline-color: none;
+        padding: 5px 20px;
+        margin-top: 10px;
+        width: 100%;
+    }
+    .badge {
+        margin:5px 0;
+        margin-right: 10px;
+        background-color: #fff;
+        font-size: 14px;
+        padding: 5px 20px;
+        color: #000;
+        border: 1px solid #000;
+        cursor: pointer;
+    }
+    i{
+        margin:0 10px;
+        font-size: 24px;
+        color:#007BFF;
+        cursor:pointer;
+    }
+    input{
+        font-weight: 600;
+    }
+}
+
+.Section2 {
+    background-color: #fff;
+    margin-top: 20px;
+    padding: 20px;
+    height: fit-content;
+    border-radius: 10px;
+    .addSkillsBtn {
+        padding: 2px 10px;
+        color: #40a9ff;
+        background-color: #e5f1fc;
+        font-weight: 600;
+    }
+}

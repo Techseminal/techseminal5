@@ -1,7 +1,6 @@
 import React from 'react'
 import { Col, Row } from 'react-bootstrap'
 import PortrayCard from './PortrayCard'
-
 import './Portray.scss'
 
 function Portray(props) {

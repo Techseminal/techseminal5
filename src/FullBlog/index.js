@@ -4,9 +4,12 @@ import { withRouter } from 'react-router'
 import { Container, Image, Row, Button, Card, Badge } from 'react-bootstrap'
 import { usePalette } from 'react-palette'
 import { AiOutlineStar, AiOutlineSave, AiOutlineShareAlt, AiFillFacebook, AiOutlineTwitter, AiFillStar, AiFillSave, AiOutlineSend, AiFillLinkedin, AiFillInstagram, AiFillMail, AiOutlineTeam } from 'react-icons/ai'
+import Loader from '../components/Loader'
 import './FullBlog.scss'
 
 function FullPortray(props) {
+    // Loader
+    const [loader, setLoader] = useState(false)
     // Current Blog data
     const portrayId = props.match.params.id;
     const [Title, setTitle] = useState('');
@@ -16,6 +19,9 @@ function FullPortray(props) {
     const [stars, setstars] = useState([]);
     const [notifications, setnotifications] = useState([]);
     const [tags, setTags] = useState([]);
+    // current user data
+    // const [saved, setsaved] = useState([]);
+
     // Author data
     const [UID, setUID] = useState('');
     const [Mail, setMail] = useState('');
@@ -25,6 +31,7 @@ function FullPortray(props) {
     const [LinkedIn, setLinkedIn] = useState('');
     // current Blog data
     useEffect(() => {
+        setLoader(true)
         firestore.collection('Blogs').doc(portrayId).onSnapshot(doc => {
             setTitle(doc.data().title)
             setdiscrp(doc.data().discrp)
@@ -40,6 +47,7 @@ function FullPortray(props) {
                 }
             })
             setnotifications(notificationsData)
+            setLoader(false)
         })
     }, [portrayId]);
     // Author data
@@ -103,6 +111,9 @@ function FullPortray(props) {
     return (
         <>
             <Row className="FullBlog">
+                {
+                    loader ? <Loader /> : null
+                }
                 <Container>
                     {/* Header Section */}
                     <header>
@@ -126,9 +137,10 @@ function FullPortray(props) {
                     <article>
                         <Image fluid className="CoverPhoto" src={image} alt="" />
                         <p className="Title"><u>{Title}</u></p>
-                        <div dangerouslySetInnerHTML={{__html: discrp}} />
+                        <div dangerouslySetInnerHTML={{ __html: discrp }} />
+                        <br />
                         {tags.map(tag => (
-                            <Badge key={tag} variant="light" style={{ color: data.vibrant, fontSize:'16px', marginRight:'10px' }}>{tag}</Badge>
+                            <Badge key={tag} variant="light" style={{ color: data.vibrant, fontSize: '16px', marginRight: '10px' }}>{tag}</Badge>
                         ))}
                     </article>
                     <br />

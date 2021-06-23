@@ -7,7 +7,7 @@ import { auth, firestore } from './firebase/firebase-utils';
 import ExplorePage from './ExplorePage';
 import FullBlog from './FullBlog'
 import UploadBlog from './UploadBlog'
-
+import Profile from './Profile'
 
 ReactDOM.render(
   <Router>
@@ -36,8 +36,11 @@ function App() {
     <Switch>
       <Route path='/' exact render={() => <ExplorePage user={user} saved={saved} />} />
       <Route path="/upload" exact render={() => <UploadBlog user={user}/>}/>
+      <Route path="/profile" exact render={() => <Profile user={user}/>}/>
       <Route path="/:id" exact render={() => <FullBlog user={user} saved={saved} />} />
     </Switch>
   )
 }
 
+
+export default App;

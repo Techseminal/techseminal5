@@ -35,14 +35,16 @@ function SearchBar(props) {
                             aria-describedby="inputGroup-sizing-sm" placeholder="Search..." className="SearchField" />
                     </InputGroup>
                     <datalist id="search">
-                        {props.filter === 'tags' ? tags.map((tag) => <option value={tag}/>) : null}
-                        {props.filter === 'title' ? DataList.slice(0,7).map((data) => <option value={data.title}/>) : null}
-                        {props.filter === 'user' ? DataList.slice(0,7).map((data) => <option value={data.author}/>) : null}
+                        {props.filter === 'tags' ? tags.map((tag) => <option value={tag} />) : null}
+                        {props.filter === 'title' ? DataList.slice(0, 7).map((data) => <option value={data.title} />) : null}
+                        {props.filter === 'user' ? DataList.slice(0, 7).map((data) => <option value={data.author} />) : null}
                     </datalist>
-                    <select onChange={(e) => props.setsort(e.target.value)}>
-                        <option value="timestamp">Latest</option>
-                        <option value="stars">More Stars</option>
+                    <select onChange={(e) => props.setfilter(e.target.value)} style={{ padding: '10px', float: 'right' }}>
+                        <option value="tags">Keyword</option>
+                        <option value="title">Titles</option>
+                        <option value="user">users</option>
                     </select>
+
                 </Col>
             </Row>
             <Row className="justify-content-md-center Categories">
@@ -54,12 +56,13 @@ function SearchBar(props) {
                     <Nav.Link className={props.category === 'Invention' ? 'Tags active' : 'Tags'} title="Idea that introduces new technology" onClick={() => props.setcategory('Invention')}>Invention</Nav.Link>
                     <Nav.Link className={props.category === 'ProblemStatement' ? 'Tags active' : 'Tags'} title="Concise discp of the problem or issues" onClick={() => props.setcategory('ProblemStatement')}>Problem Statement</Nav.Link>
                 </Nav>
-                <select onChange={(e) => props.setfilter(e.target.value)} style={{padding:'10px', float:'right'}}>
-                    <option value="tags">Keywords</option>
-                    <option value="title">Titles</option>
-                    <option value="user">users</option>
-                </select>
             </Row>
+            <center>
+                <select className="filter" onChange={(e) => props.setsort(e.target.value)}>
+                    <option value="timestamp">Latest</option>
+                    <option value="stars">More Stars</option>
+                </select>
+            </center>
         </Container>
     )
 }

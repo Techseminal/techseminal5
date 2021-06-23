@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Navbar, Nav, Button, Modal } from "react-bootstrap";
-import { FaFile, FaSave, FaUserCircle, FaBell, FaCloudUploadAlt, FaGoogle } from 'react-icons/fa'
+import { FaFile, FaSave, FaUserCircle, FaBell, FaCloudUploadAlt, FaGoogle} from 'react-icons/fa'
+import {AiFillHome} from 'react-icons/ai'
 import { FiMenu } from 'react-icons/fi'
-import { signInWithGoogle, firestore, signOut } from '../../firebase/firebase-utils'
+import { signInWithGoogle, firestore } from '../../firebase/firebase-utils'
 import './Navbar.scss'
 import { withRouter } from 'react-router-dom'
 
@@ -95,7 +96,10 @@ function NavBar(props) {
         <>
             <Navbar bg="light" expand="lg" fixed="top" className="Navbar">
                 {ProfileModal}
-                <Navbar.Brand href="#home" className="NavBrand">Tech Seminal</Navbar.Brand>
+                <Navbar.Brand href="#home" className="NavBrand" style={{color:'#131B26'}}>Tech Seminal</Navbar.Brand>
+                <Nav className="ml-auto">
+                    <Nav.Link id='bellS' className="Navlink" href="#Notifications" style={{ margin: '0 5px' }}><FaBell style={{ color: 'tomato', fontSize: '20px' }} /></Nav.Link>
+                </Nav>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" className="NavbarToogle">
                     <FiMenu style={{ fontSize: '24px' }} />
                 </Navbar.Toggle>
@@ -103,10 +107,11 @@ function NavBar(props) {
                     <Nav className="ml-auto">
                         {props.user ?
                             <>
-                                <Nav.Link className="Navlink" href="#MyPosts"><i><FaFile style={{ color: '#00D1CE' }} /></i> My Posts</Nav.Link>
+                                <Nav.Link className="Navlink" onClick={()=>props.history.push('/')}><i><AiFillHome style={{ color: '#FF8862' }} /></i> Home</Nav.Link>
                                 <Nav.Link className="Navlink" href="#Saved"><i><FaSave style={{ color: '#F4C726' }} /></i> Saved</Nav.Link>
-                                <Nav.Link className="Navlink" onClick={signOut}><i><FaUserCircle style={{ color: '#007FDC' }} /></i> Profile</Nav.Link>
-                                <Nav.Link className="Navlink" href="#Notifications"><i><FaBell style={{ color: 'tomato' }} /></i> Notifcations</Nav.Link>
+                                <Nav.Link className="Navlink" onClick={() => props.history.push('/profile')}><i><FaUserCircle style={{ color: '#007FDC' }} /></i> Profile</Nav.Link>
+                                <Nav.Link className="Navlink" href="#Docs"><i><FaFile style={{ color: '#00D1CE' }} /></i> Docs</Nav.Link>
+                                <Nav.Link id='bellL' className="Navlink" href="#Notifications" style={{ margin: '0 5px' }}><FaBell style={{ color: 'tomato', fontSize: '20px' }} /></Nav.Link>
                                 <Button variant='primary' className="UploadBtn" onClick={handleUpload}><FaCloudUploadAlt style={{ marginRight: '5px', fontSize: '18px' }} />upload</Button>
                             </>
                             : <Button variant='primary' className="UploadBtn" onClick={signIn}><FaGoogle style={{ marginRight: '5px', fontSize: '18px' }} />sign in</Button>}

@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from 'react'
 import { firestore } from '../firebase/firebase-utils'
-
 import Navbar from './Navbar'
 import Banner from './Banner'
 import SearchBar from './SearchBar'
 import Portray from '../ExplorePage/Portray'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './ExplorePage.scss'
+import Loader from '../components/Loader'
+
 
 function ExplorePage(props) {
+    //loader
+    const [loader,setLoader] = useState(false)
     const [Blogs, setBlogs] = useState([]);
     const [filteredBlogs, setfilteredBlogs] = useState([]);
     const [searchKey, setsearchKey] = useState('');
@@ -18,6 +21,7 @@ function ExplorePage(props) {
     // set blogs
     useEffect(() => {
         if (category === 'All') {
+            setLoader(true)
             firestore.collection('Blogs').onSnapshot(querySnapshot => {
                 const blogs = querySnapshot.docs.map((doc) => {
                     return {
@@ -26,6 +30,7 @@ function ExplorePage(props) {
                     }
                 })
                 setBlogs(blogs);
+                setLoader(false)
             })
         }
         else {
@@ -56,7 +61,7 @@ function ExplorePage(props) {
                 searchUser()
             }
         }
-    // eslint-disable-next-line
+        // eslint-disable-next-line
     }, [searchKey, Blogs, filter])
 
     function searchTag() {
@@ -97,6 +102,9 @@ function ExplorePage(props) {
     }
     return (
         <div className="ExplorePage">
+            {
+                loader ? <Loader/> : null
+            }
             <Navbar user={props.user} />
             <Banner />
             <SearchBar
@@ -104,9 +112,9 @@ function ExplorePage(props) {
                 setcategory={handleCategory}
                 category={category}
                 setsort={handleSort}
-                setfilter={handleFilter} 
-                filter={filter}/>
-            <Portray Blogs={sortBlogs()} user={props.user} saved={props.saved}/>
+                setfilter={handleFilter}
+                filter={filter} />
+            <Portray Blogs={sortBlogs()} user={props.user} saved={props.saved} />
         </div>
     )
 }
