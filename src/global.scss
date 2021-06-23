@@ -61,3 +61,20 @@ body {
         }
     }
 }
+
+.modal-custom{
+    width: 100% !important;
+    height: 100% !important;
+    margin: 0;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.7);
+    z-index: 999;
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    overflow: hidden;
+}

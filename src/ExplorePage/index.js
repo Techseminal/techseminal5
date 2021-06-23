@@ -34,7 +34,6 @@ function ExplorePage(props) {
             })
         }
         else {
-            setLoader(true)
             firestore.collection('Blogs').where('category', '==', category).onSnapshot(querySnapshot => {
                 const blogs = querySnapshot.docs.map((doc) => {
                     return {
@@ -43,7 +42,6 @@ function ExplorePage(props) {
                     }
                 })
                 setBlogs(blogs);
-                setLoader(false)
             })
         }
     }, [category]);
