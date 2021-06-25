@@ -15,7 +15,7 @@ function PortrayCard(props) {
 
     function updateStars(id) {
         if (props.stars.find((uid) => uid === props.user.uid)) {
-            firestore.collection('Blogs').doc(id).update({
+            firestore.collection('Blogs').doc(id).update({  
                 'stars': firebase.firestore.FieldValue.arrayRemove(props.user.uid)
             })
         }

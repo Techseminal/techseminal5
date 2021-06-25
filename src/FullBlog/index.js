@@ -99,6 +99,15 @@ function FullPortray(props) {
         })
     }
 
+    function shareHandler() {
+        if(navigator.share) {
+            navigator.share({
+                title:Title,
+                url:'https://www.techseminal.org'
+            })
+        }
+    }
+
     return (
         <>
             <Row className="FullBlog">
@@ -120,7 +129,7 @@ function FullPortray(props) {
                                 {props.user ? stars.find((uid) => uid === props.user.uid) ? <div><AiFillStar />&nbsp;&nbsp;{stars.length}</div> : <div><AiOutlineStar />&nbsp;&nbsp;Star</div> : <div><AiOutlineStar />&nbsp;&nbsp;Star</div>}
                             </Button>
                             <Button variant="light" style={{ color: data.vibrant }} onClick={props.user ? savedHandler : signInWithGoogle}>{props.saved.find((postID) => postID === portrayId) ? <AiFillSave /> : <AiOutlineSave />}</Button>
-                            <Button variant="light" style={{ color: data.vibrant }}><AiOutlineShareAlt /></Button>
+                            <Button variant="light" style={{ color: data.vibrant }} onClick={shareHandler}><AiOutlineShareAlt /></Button>
                         </div>
                     </header>
 

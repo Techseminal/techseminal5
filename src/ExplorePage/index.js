@@ -12,6 +12,7 @@ import Loader from '../components/Loader'
 function ExplorePage(props) {
     //loader
     const [loader,setLoader] = useState(false)
+    const [BlogsDB, setBlogsDB] = useState([]);
     const [Blogs, setBlogs] = useState([]);
     const [filteredBlogs, setfilteredBlogs] = useState([]);
     const [searchKey, setsearchKey] = useState('');
@@ -20,7 +21,6 @@ function ExplorePage(props) {
     const [filter, setfilter] = useState('tags');
     // set blogs
     useEffect(() => {
-        if (category === 'All') {
             setLoader(true)
             firestore.collection('Blogs').onSnapshot(querySnapshot => {
                 const blogs = querySnapshot.docs.map((doc) => {
@@ -29,22 +29,20 @@ function ExplorePage(props) {
                         id: doc.id
                     }
                 })
-                setBlogs(blogs);
-                setLoader(false);
+                setBlogsDB(blogs)
+                setLoader(false)
             })
+    }, []);
+
+    useEffect(() => {
+        if(category === 'All') {
+            setBlogs(BlogsDB)
         }
         else {
-            firestore.collection('Blogs').where('category', '==', category).onSnapshot(querySnapshot => {
-                const blogs = querySnapshot.docs.map((doc) => {
-                    return {
-                        ...doc.data(),
-                        id: doc.id
-                    }
-                })
-                setBlogs(blogs);
-            })
+            setBlogs(BlogsDB.filter((blog) => blog.category === category))
         }
-    }, [category]);
+    }, [category, BlogsDB]);
+
     // filter blogs
     useEffect(() => {
         if (searchKey === '') {
