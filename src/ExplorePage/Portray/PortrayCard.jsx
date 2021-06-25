@@ -1,7 +1,7 @@
 import React from 'react'
 import { Card, Button, Badge } from 'react-bootstrap'
 import './Portray.scss'
-import firebase from 'firebase'
+import firebase from '../../firebase/firebase-utils'
 import { firestore, signInWithGoogle } from '../../firebase/firebase-utils';
 import { withRouter } from "react-router-dom";
 import { AiOutlineStar, AiOutlineSave, AiFillStar, AiFillSave } from 'react-icons/ai'
@@ -16,7 +16,7 @@ function PortrayCard(props) {
 
     function updateStars(id) {
         if (props.stars.find((uid) => uid === props.user.uid)) {
-            firestore.collection('Blogs').doc(id).update({
+            firestore.collection('Blogs').doc(id).update({  
                 'stars': firebase.firestore.FieldValue.arrayRemove(props.user.uid)
             })
         }

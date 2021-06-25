@@ -35,9 +35,9 @@ function SearchBar(props) {
                             aria-describedby="inputGroup-sizing-sm" placeholder="Search..." className="SearchField" />
                     </InputGroup>
                     <datalist id="search">
-                        {props.filter === 'tags' ? tags.map((tag) => <option value={tag} />) : null}
-                        {props.filter === 'title' ? DataList.slice(0, 7).map((data) => <option value={data.title} />) : null}
-                        {props.filter === 'user' ? DataList.slice(0, 7).map((data) => <option value={data.author} />) : null}
+                        {props.filter === 'tags' ? tags.map((tag) => <option value={tag} key={tag}/>) : null}
+                        {props.filter === 'title' ? DataList.map((data) => <option value={data.title} key={data.title}/>) : null}
+                        {props.filter === 'user' ? DataList.map((data) => <option value={data.author} key={data.author}/>) : null}
                     </datalist>
                     <select onChange={(e) => props.setfilter(e.target.value)} style={{ padding: '10px', float: 'right' }}>
                         <option value="tags">Keyword</option>
@@ -48,7 +48,7 @@ function SearchBar(props) {
                 </Col>
             </Row>
             <Row className="justify-content-md-center Categories">
-                <Nav defaultActiveKey="#All" className="TagesMenu">
+                <Nav className="TagesMenu">
                     <Nav.Link className={props.category === 'All' ? 'Tags active' : 'Tags'} title="All categorie Ideas" onClick={() => props.setcategory('All')}>All</Nav.Link>
                     <Nav.Link className={props.category === 'Project' ? 'Tags active' : 'Tags'} title="Developing existing Ideas" onClick={() => props.setcategory('Project')} >Projects</Nav.Link>
                     <Nav.Link className={props.category === 'Business Idea' ? 'Tags active' : 'Tags'} title="Ideas related to business & revenue" onClick={() => props.setcategory('Business Idea')}>Business Ideas</Nav.Link>

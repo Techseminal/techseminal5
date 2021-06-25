@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Navbar, Nav, Button, Modal } from "react-bootstrap";
-import { FaFile, FaSave, FaUserCircle, FaBell, FaCloudUploadAlt, FaGoogle} from 'react-icons/fa'
-import {AiFillHome} from 'react-icons/ai'
+import { FaFile, FaUserCircle, FaBell, FaCloudUploadAlt, FaGoogle } from 'react-icons/fa'
+import { AiFillHome } from 'react-icons/ai'
 import { FiMenu } from 'react-icons/fi'
 import { signInWithGoogle, firestore } from '../../firebase/firebase-utils'
 import './Navbar.scss'
@@ -9,7 +9,6 @@ import { withRouter } from 'react-router-dom'
 
 function NavBar(props) {
     const [users, setusers] = useState([]);
-    const [isUnique, setisUnique] = useState(false);
 
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
@@ -34,12 +33,12 @@ function NavBar(props) {
         signInWithGoogle()
             .then((result) => {
                 if (result.user) {
-                    if (users.find((user) => user === result.user.uid)) {
+                    if (users.find((user) => user.id === result.user.uid)) {
                         firestore.collection('Users').doc(result.user.uid).onSnapshot(querySnapshot => {
                             const userProfile = {
                                 ...querySnapshot.data()
                             }
-                            if(userProfile.bio === '') {
+                            if (userProfile.bio === '') {
                                 setShow(true);
                             }
                             else {
@@ -48,29 +47,27 @@ function NavBar(props) {
                         })
                     }
                     else {
-                        let username = ''
-                        if(!users.find((user) => user.name ===  result.user.displayName)) {
-                            username = result.user.displayName
-                            setisUnique(true)
-                            console.log('unique')
+                        let username = result.user.displayName
+                        if (users.find((user) => user.name.replace(/\s/g, "") === result.user.displayName.replace(/\s/g, ""))) {
+                            username = ''
                         }
                         else {
-                            username = ''
-                            setisUnique(false)
-                            console.log('Not unique')
+                            username = result.user.displayName
                         }
                         firestore.collection('Users').doc(result.user.uid).set({
                             'username': username,
+                            'nickname':'',
                             'bio': '',
                             'mail': result.user.email,
                             'facebook': '',
                             'instagram': '',
-                            'twiiter': '',
+                            'twitter': '',
                             'linkedIn': '',
                             'profileImgUrl': result.user.photoURL,
                             'saved': [],
+                            'skills': [],
                         })
-                        setShow(true);
+                        props.history.push('/profile?edit=true')
                     }
                 }
             })
@@ -83,10 +80,10 @@ function NavBar(props) {
             </Modal.Header>
             <Modal.Body>Fill your details and set up your profile</Modal.Body>
             <Modal.Footer>
-                {isUnique ? <Button variant="secondary" onClick={handleClose}>
+                <Button variant="secondary" onClick={handleClose}>
                     Skip For Now
-                </Button> : null}
-                <Button variant="primary" onClick={handleClose}>
+                </Button>
+                <Button variant="primary" onClick={() => props.history.push('/profile?edit=true')}>
                     Continue
                 </Button>
             </Modal.Footer>
@@ -96,7 +93,7 @@ function NavBar(props) {
         <>
             <Navbar bg="light" expand="lg" fixed="top" className="Navbar">
                 {ProfileModal}
-                <Navbar.Brand href="#home" className="NavBrand" style={{color:'#131B26'}}>Tech Seminal</Navbar.Brand>
+                <Navbar.Brand href="#home" className="NavBrand" style={{ color: '#131B26' }}>Tech Seminal</Navbar.Brand>
                 <Nav className="ml-auto">
                     <Nav.Link id='bellS' className="Navlink" href="#Notifications" style={{ margin: '0 5px' }}><FaBell style={{ color: 'tomato', fontSize: '20px' }} /></Nav.Link>
                 </Nav>
@@ -107,8 +104,7 @@ function NavBar(props) {
                     <Nav className="ml-auto">
                         {props.user ?
                             <>
-                                <Nav.Link className="Navlink" onClick={()=>props.history.push('/')}><i><AiFillHome style={{ color: '#FF8862' }} /></i> Home</Nav.Link>
-                                <Nav.Link className="Navlink" href="#Saved"><i><FaSave style={{ color: '#F4C726' }} /></i> Saved</Nav.Link>
+                                <Nav.Link className="Navlink" onClick={() => props.history.push('/')}><i><AiFillHome style={{ color: '#FF8862' }} /></i> Home</Nav.Link>
                                 <Nav.Link className="Navlink" onClick={() => props.history.push('/profile')}><i><FaUserCircle style={{ color: '#007FDC' }} /></i> Profile</Nav.Link>
                                 <Nav.Link className="Navlink" href="#Docs"><i><FaFile style={{ color: '#00D1CE' }} /></i> Docs</Nav.Link>
                                 <Nav.Link id='bellL' className="Navlink" href="#Notifications" style={{ margin: '0 5px' }}><FaBell style={{ color: 'tomato', fontSize: '20px' }} /></Nav.Link>
