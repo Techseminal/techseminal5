@@ -58,7 +58,7 @@ function NavBar(props) {
                         }
                         firestore.collection('Users').doc(result.user.uid).set({
                             'username': username,
-                            'nickname':'',
+                            'nickname': '',
                             'bio': '',
                             'mail': result.user.email,
                             'facebook': '',
@@ -106,12 +106,7 @@ function NavBar(props) {
                     <Nav className="ml-auto">
                         {props.user ?
                             <>
-<<<<<<< HEAD
-                                <Nav.Link as="p" className="Navlink" onClick={()=>props.history.push('/')}><i><AiFillHome style={{ color: '#FF8862' }} /></i> Home</Nav.Link>
-                                <Nav.Link className="Navlink" ><i><FaSave style={{ color: '#F4C726' }} /></i> Saved</Nav.Link>
-=======
                                 <Nav.Link className="Navlink" onClick={() => props.history.push('/')}><i><AiFillHome style={{ color: '#FF8862' }} /></i> Home</Nav.Link>
->>>>>>> 4caa5d3e1e792e635f0c0ab1a7119905252af1af
                                 <Nav.Link className="Navlink" onClick={() => props.history.push('/profile')}><i><FaUserCircle style={{ color: '#007FDC' }} /></i> Profile</Nav.Link>
                                 <Nav.Link className="Navlink" ><i><FaFile style={{ color: '#00D1CE' }} /></i> Docs</Nav.Link>
                                 <Nav.Link id='bellL' className="Navlink" href="#Notifications" style={{ margin: '0 5px' }}><FaBell style={{ color: 'tomato', fontSize: '20px' }} /></Nav.Link>
