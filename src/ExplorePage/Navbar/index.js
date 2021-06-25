@@ -6,6 +6,7 @@ import { FiMenu } from 'react-icons/fi'
 import { signInWithGoogle, firestore } from '../../firebase/firebase-utils'
 import './Navbar.scss'
 import { withRouter } from 'react-router-dom'
+import { cleanup } from '@testing-library/react';
 
 function NavBar(props) {
     const [users, setusers] = useState([]);
@@ -24,6 +25,7 @@ function NavBar(props) {
             })
             setusers(users);
         })
+        return cleanup();
     }, []);
 
     function signIn() {
@@ -93,10 +95,10 @@ function NavBar(props) {
                     <Nav className="ml-auto">
                         {props.user ?
                             <>
-                                <Nav.Link className="Navlink" onClick={()=>props.history.push('/')}><i><AiFillHome style={{ color: '#FF8862' }} /></i> Home</Nav.Link>
-                                <Nav.Link className="Navlink" href="#Saved"><i><FaSave style={{ color: '#F4C726' }} /></i> Saved</Nav.Link>
+                                <Nav.Link as="p" className="Navlink" onClick={()=>props.history.push('/')}><i><AiFillHome style={{ color: '#FF8862' }} /></i> Home</Nav.Link>
+                                <Nav.Link className="Navlink" ><i><FaSave style={{ color: '#F4C726' }} /></i> Saved</Nav.Link>
                                 <Nav.Link className="Navlink" onClick={() => props.history.push('/profile')}><i><FaUserCircle style={{ color: '#007FDC' }} /></i> Profile</Nav.Link>
-                                <Nav.Link className="Navlink" href="#Docs"><i><FaFile style={{ color: '#00D1CE' }} /></i> Docs</Nav.Link>
+                                <Nav.Link className="Navlink" ><i><FaFile style={{ color: '#00D1CE' }} /></i> Docs</Nav.Link>
                                 <Nav.Link id='bellL' className="Navlink" href="#Notifications" style={{ margin: '0 5px' }}><FaBell style={{ color: 'tomato', fontSize: '20px' }} /></Nav.Link>
                                 <Button variant='primary' className="UploadBtn" onClick={handleUpload}><FaCloudUploadAlt style={{ marginRight: '5px', fontSize: '18px' }} />upload</Button>
                             </>

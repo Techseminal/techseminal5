@@ -30,7 +30,7 @@ function ExplorePage(props) {
                     }
                 })
                 setBlogs(blogs);
-                setLoader(false)
+                setLoader(false);
             })
         }
         else {
@@ -76,20 +76,20 @@ function ExplorePage(props) {
         setfilteredBlogs(Blogs.filter((blog) => blog.author.toLowerCase().includes(searchKey.toLowerCase())))
     }
 
-    function handleSearchKey(input) {
-        setsearchKey(input)
+    function handleSearchKey(value) {
+        setsearchKey(value)
     }
 
-    function handleCategory(category) {
-        setcategory(category)
+    function handleCategory(value) {
+        setcategory(value)
     }
 
-    function handleSort(sort) {
-        setsort(sort)
+    function handleSort(value) {
+        setsort(value)
     }
 
-    function handleFilter(filter) {
-        setfilter(filter)
+    function handleFilter(value) {
+        setfilter(value)
     }
 
     function sortBlogs() {
@@ -109,7 +109,7 @@ function ExplorePage(props) {
             <Banner />
             <SearchBar
                 setsearchKey={handleSearchKey}
-                setcategory={handleCategory}
+                setCategory={handleCategory}
                 category={category}
                 setsort={handleSort}
                 setfilter={handleFilter}

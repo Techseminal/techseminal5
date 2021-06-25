@@ -24,23 +24,33 @@
             font-weight: 600;
             margin-left: 10px;
             background-color: transparent;
-            cursor:pointer;
+            cursor: pointer;
+            @media screen and (max-width: 992px) {
+                font-size: 14px;
+            }
         }
     }
     .Categories {
-        margin:40px 5px;
-        margin-bottom: 10px;
+        margin: 40px 0px;
+        display:flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        width:100%;
+        @media screen and (max-width: 992px) {
+            margin:30px 0;
+        }
         .TagesMenu {
-            display:block;
+            margin:10px 0;
+            display: block;
             &::-webkit-scrollbar {
-               height:2px;
+                height: 2px;
             }
             &::-webkit-scrollbar-thumb {
                 background: #d2ebee;
                 border-radius: 25px;
-              }
-            @media screen and (max-width:992px){
-                overflow-x:auto;
+            }
+            @media screen and (max-width: 992px) {
+                overflow-x: auto;
                 white-space: nowrap;
                 padding-bottom: 10px;
             }
@@ -49,11 +59,12 @@
                 display: inline-block;
                 transition: ease-in 0.2s;
                 color: gray;
-                @media screen and (max-width:992px){
-                    margin:5px;
+                @media screen and (max-width: 992px) {
+                    margin: 5px;
+                    font-size: 14px;
                 }
                 &.active {
-                    background-color: #40A9FF;
+                    background-color: #40a9ff;
                     border-radius: 10px;
                     padding: 10px 20px;
                     color: #fff;
@@ -62,17 +73,22 @@
                 }
             }
         }
-    }
-    .filter{
-        border: none;
-        outline:none;
-        font-family: "Poppins", sans-serif;
-        letter-spacing: 0.5px;
-        font-weight: 600;
-        cursor:pointer;
-        margin:20px 0;
-        padding:10px;
-        box-shadow: 0px 5px 10px  rgba(0,0,0,0.1);
-        color:#40A9FF;
+        .filter {
+            margin: 10px 0;
+            border: none;
+            outline: none;
+            font-family: "Poppins", sans-serif;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+            cursor: pointer;
+            float:right;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1);
+            color: #40a9ff;
+            @media screen and (max-width: 992px) {
+                font-size: 14px;
+            }
+        }
     }
 }

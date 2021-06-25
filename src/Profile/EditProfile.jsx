@@ -3,7 +3,6 @@ import { Row, Col, Image, Button, Alert, Form, InputGroup, FormControl } from 'r
 import { AiFillFacebook, AiFillInstagram, AiFillLinkedin, AiFillTwitterCircle } from 'react-icons/ai'
 
 function EditProfile(props) {
-    console.log(props.user)
     return (
         <Row className="EditProfile">
             <Col sm={12} md={4} style={{ textAlign: 'center' }}>

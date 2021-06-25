@@ -1,8 +1,7 @@
 import React from 'react'
 import { Card, Button, Badge } from 'react-bootstrap'
 import './Portray.scss'
-import firebase from 'firebase'
-import { firestore, signInWithGoogle } from '../../firebase/firebase-utils';
+import firebase, { firestore, signInWithGoogle } from '../../firebase/firebase-utils';
 import { withRouter } from "react-router-dom";
 import { AiOutlineStar, AiOutlineSave, AiFillStar, AiFillSave } from 'react-icons/ai'
 import { usePalette } from 'react-palette'
@@ -11,7 +10,7 @@ function PortrayCard(props) {
 
     const PushId = () => {
         props.history.push('/' + props.id)
-        window.scrollTo(0, 0)
+        window.scrollTo(0,0)
     }
 
     function updateStars(id) {
