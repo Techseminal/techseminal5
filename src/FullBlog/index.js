@@ -6,6 +6,7 @@ import { usePalette } from 'react-palette'
 import { AiOutlineStar, AiOutlineSave, AiOutlineShareAlt, AiFillFacebook, AiOutlineTwitter, AiFillStar, AiFillSave, AiOutlineSend, AiFillLinkedin, AiFillInstagram, AiFillMail, AiOutlineTeam } from 'react-icons/ai'
 import Loader from '../components/Loader'
 import './FullBlog.scss'
+import StepProgressBar from '../components/StepProgressBar'
 
 function FullPortray(props) {
     // Loader
@@ -100,10 +101,10 @@ function FullPortray(props) {
     }
 
     function shareHandler() {
-        if(navigator.share) {
+        if (navigator.share) {
             navigator.share({
-                title:Title,
-                url:'https://www.techseminal.org'
+                title: Title,
+                url: 'https://www.techseminal.org'
             })
         }
     }
@@ -144,13 +145,17 @@ function FullPortray(props) {
                         ))}
                     </article>
                     <br />
-                    <Button variant="light" className="TeamRequestBtn" style={{ border: `1px solid ${data.vibrant}` }} title="Send team request" onClick={props.user ? notifications.find((notification) => notification['uid'] === props.user.uid) ? null : teamRequestHandler : signInWithGoogle}>
-                        {props.user ? notifications.find((notification) => notification['uid'] === props.user.uid) ?
-                            <div><AiOutlineSend style={{ color: data.vibrant }} />&nbsp;&nbsp;Requested</div>
-                            : <div><AiOutlineTeam style={{ color: data.vibrant }} />&nbsp;&nbsp;Team request</div>
-                            : <div><AiOutlineTeam style={{ color: data.vibrant }} />&nbsp;&nbsp;Team request</div>}
-                    </Button>
-                    <br />
+                    <Row style={{ margin: '10px 0', width: '100%', display: 'flex', justifyContent: 'flex-end' }}>
+                        <Button variant="light" className="TeamRequestBtn" style={{ border: `1px solid ${data.vibrant}` }} title="Send team request" onClick={props.user ? notifications.find((notification) => notification['uid'] === props.user.uid) ? null : teamRequestHandler : signInWithGoogle}>
+                            {props.user ? notifications.find((notification) => notification['uid'] === props.user.uid) ?
+                                <div><AiOutlineSend style={{ color: data.vibrant }} />&nbsp;&nbsp;Requested</div>
+                                : <div><AiOutlineTeam style={{ color: data.vibrant }} />&nbsp;&nbsp;Team request</div>
+                                : <div><AiOutlineTeam style={{ color: data.vibrant }} />&nbsp;&nbsp;Team request</div>}
+                        </Button>
+                    </Row>
+                    <div style={{margin:'100px 10px'}}>
+                        <StepProgressBar stage="25" />
+                    </div>
                     {/* Donate section  */}
                     <Card className="Donate">
                         <Card.Body>

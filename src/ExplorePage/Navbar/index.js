@@ -109,7 +109,7 @@ function NavBar(props) {
                                 <Nav.Link className="Navlink" onClick={() => props.history.push('/')}><i><AiFillHome style={{ color: '#FF8862' }} /></i> Home</Nav.Link>
                                 <Nav.Link className="Navlink" onClick={() => props.history.push('/profile')}><i><FaUserCircle style={{ color: '#007FDC' }} /></i> Profile</Nav.Link>
                                 <Nav.Link className="Navlink" ><i><FaFile style={{ color: '#00D1CE' }} /></i> Docs</Nav.Link>
-                                <Nav.Link id='bellL' className="Navlink" href="#Notifications" style={{ margin: '0 5px' }}><FaBell style={{ color: 'tomato', fontSize: '20px' }} /></Nav.Link>
+                                <Nav.Link id='bellL' className="Navlink" onClick={() => props.history.push('/notifications')} style={{ margin: '0 5px' }}><FaBell style={{ color: 'tomato', fontSize: '20px' }} /></Nav.Link>
                                 <Button variant='primary' className="UploadBtn" onClick={handleUpload}><FaCloudUploadAlt style={{ marginRight: '5px', fontSize: '18px' }} />upload</Button>
                             </>
                             : <Button variant='primary' className="UploadBtn" onClick={signIn}><FaGoogle style={{ marginRight: '5px', fontSize: '18px' }} />sign in</Button>}

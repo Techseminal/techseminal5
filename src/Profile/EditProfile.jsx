@@ -49,8 +49,10 @@ function EditProfile(props) {
 
     function addSkill(e) {
         e.preventDefault();
-        setskills([...skills, document.getElementById('skills').value])
-        document.getElementById('skills').value = ''
+        if (document.getElementById('skills').value) {
+            setskills([...skills, document.getElementById('skills').value])
+            document.getElementById('skills').value = ''
+        }
     }
 
     function saveProfile() {
@@ -125,13 +127,13 @@ function EditProfile(props) {
                                 id="skills"
                             />
                             <InputGroup.Append>
-                                <Button type='submit' onClick={(e) => addSkill(e)} variant="outline-primary" style={{ padding: '5px 20px' }}>Add</Button>
+                                <Button type='submit' onClick={addSkill} variant="outline-primary" style={{ padding: '5px 20px' }}>Add</Button>
                             </InputGroup.Append>
                         </InputGroup>
                     </Form.Group>
                     {
                         skills.map(skill => (
-                            <Badge key={skill} style={{ marginRight: '10px', fontSize: '14px' }} pill variant="outline-dark" onClick={() => setskills(skills.filter(Skill => Skill !== skill))}>
+                            <Badge key={skill} style={{ marginRight: '10px', fontSize: '14px' }} pill variant="primary" onClick={() => setskills(skills.filter(Skill => Skill !== skill))}>
                                 <AiFillCloseCircle style={{ cursor: 'pointer' }} title='onClick delete skill' />&nbsp;{skill}
                             </Badge>
                         ))

@@ -8,6 +8,7 @@ import ExplorePage from './ExplorePage';
 import FullBlog from './FullBlog'
 import UploadBlog from './UploadBlog'
 import Profile from './Profile'
+import Notifications from './Notifications'
 
 ReactDOM.render(
   <Router>
@@ -35,6 +36,7 @@ function App() {
   return (
     <Switch>
       <Route path='/' exact render={() => <ExplorePage user={user} saved={saved} />} />
+      <Route path="/notifications" exact render={() => <Notifications user={user}/>}/>
       <Route path="/upload" exact render={() => <UploadBlog user={user}/>}/>
       <Route path="/profile" exact render={() => <Profile user={user} saved={saved}/>}/>
       <Route path="/:id" exact render={() => <FullBlog user={user} saved={saved} />} />

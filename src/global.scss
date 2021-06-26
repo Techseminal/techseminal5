@@ -23,7 +23,7 @@ body {
     bottom: 0;
     background-color: #eff6fde0;
     z-index: 999;
-    position: absolute;
+    position: fixed;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -43,8 +43,8 @@ body {
         height: 0;
         margin: 8px;
         box-sizing: border-box;
-        border: 32px solid #40A9FF;
-        border-color: #40A9FF transparent #40A9FF transparent;
+        border: 32px solid #40a9ff;
+        border-color: #40a9ff transparent #40a9ff transparent;
         animation: lds-hourglass 1.2s infinite;
     }
     @keyframes lds-hourglass {
@@ -62,14 +62,14 @@ body {
     }
 }
 
-.modal-custom{
+.modal-custom {
     width: 100% !important;
     height: 100% !important;
     margin: 0;
     top: 0;
     left: 0;
     bottom: 0;
-    background-color: rgba(0,0,0,0.7);
+    background-color: rgba(0, 0, 0, 0.7);
     z-index: 999;
     position: absolute;
     display: flex;
@@ -77,4 +77,20 @@ body {
     justify-content: center;
     color: #fff;
     overflow: hidden;
+}
+.ProgressImg {
+    margin: 100px 10px;
+    background-color: #fff;
+    padding: 5px;
+    border-radius: 50%;
+    border: 1px solid #2E8BDC;
+    width: 60px;
+    transition: ease-in 0.2s;
+    cursor: pointer;
+    &:hover{
+        transform: scale(1.1);
+    }
+    @media screen and (max-width:765px){
+        width: 50px;
+    }
 }

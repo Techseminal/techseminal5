@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { AiOutlineClose } from 'react-icons/ai'
-import { Button, Container, ProgressBar } from 'react-bootstrap'
+import { Button, Container, ProgressBar as PBar } from 'react-bootstrap'
 import Section1 from './Section1'
 import Section2 from './Section2'
 import Section3 from './Section3'
@@ -71,7 +71,7 @@ function UploadBlog(props) {
         <>
             {loader ? <Loader /> : null}
             <div style={{ overflowX: 'hidden' }}>
-                <ProgressBar style={{ height: '5px' }} animated now={Progress} />
+                <PBar style={{ height: '5px' }} animated now={Progress} />
                 <AiOutlineClose
                     onClick={() => props.history.push('/')}
                     title="Close Upload"
