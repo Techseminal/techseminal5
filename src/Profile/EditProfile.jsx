@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Row, Col, Image, Button, Alert, Form, InputGroup, FormControl, Badge } from 'react-bootstrap'
-import { AiFillFacebook, AiFillInstagram, AiFillLinkedin, AiFillTwitterCircle, AiFillCloseCircle } from 'react-icons/ai'
+import { AiFillFacebook, AiFillInstagram, AiFillLinkedin, AiFillTwitterCircle, AiFillCloseCircle, AiOutlineGoogle } from 'react-icons/ai'
+import useUnsavedChangesWarning from '../components/useUnsavedChangesWarning';
 import { firestore } from '../firebase/firebase-utils';
 
 function EditProfile(props) {
@@ -10,10 +11,13 @@ function EditProfile(props) {
     const [nickname, setnickname] = useState('');
     const [bio, setbio] = useState('');
     const [skills, setskills] = useState([]);
+    const [payment, setpayment] = useState({});
     const [facebook, setfacebook] = useState('');
     const [instagram, setinstagram] = useState('');
     const [twitter, settwitter] = useState('');
     const [linkedin, setlinkedin] = useState('');
+
+    const [Prompt, setDirty, setPristine] = useUnsavedChangesWarning();
     useEffect(() => {
         let existingName = '';
         firestore.collection('Users').doc(props.user.uid).onSnapshot(user => {
@@ -21,6 +25,7 @@ function EditProfile(props) {
             setnickname(user.data().nickname)
             setbio(user.data().bio)
             setskills(user.data().skills)
+            setpayment(user.data().payment)
             setfacebook(user.data().facebook)
             setinstagram(user.data().instagram)
             settwitter(user.data().twitter)
@@ -65,6 +70,7 @@ function EditProfile(props) {
                 'nickname': nickname,
                 'bio': bio,
                 'skills': skills,
+                'payment': payment,
                 'facebook': facebook,
                 'instagram': instagram,
                 'twitter': twitter,
@@ -87,7 +93,7 @@ function EditProfile(props) {
                 <Form>
                     <Form.Group controlId="formBasicEmail">
                         <Form.Label>Username</Form.Label>
-                        <Form.Control type="text" value={username} onChange={(e) => usernameHandler(e.target.value)} placeholder="enter unique usename" />
+                        <Form.Control type="text" value={username} onChange={(e) => {usernameHandler(e.target.value); setDirty();}} placeholder="enter unique usename" />
                         <Form.Text style={{ color: error ? 'red' : 'black' }}>
                             {error ? 'Username already exists' : 'Help people discover your account by using your usename'}
                         </Form.Text>
@@ -95,7 +101,7 @@ function EditProfile(props) {
                     <br />
                     <Form.Group>
                         <Form.Label>Nickname</Form.Label>
-                        <Form.Control type="text" value={nickname} onChange={(e) => setnickname(e.target.value)} placeholder="enter nickname" />
+                        <Form.Control type="text" value={nickname} onChange={(e) => {setnickname(e.target.value); setDirty();}} placeholder="enter nickname" />
                         <Form.Text>choose a name to display on your account</Form.Text>
                     </Form.Group>
                     <br />
@@ -111,7 +117,7 @@ function EditProfile(props) {
                     <br />
                     <Form.Group controlId="exampleForm.ControlTextarea1">
                         <Form.Label>About you</Form.Label>
-                        <Form.Control as="textarea" rows={3} value={bio} onChange={(e) => setbio(e.target.value)} />
+                        <Form.Control as="textarea" rows={3} value={bio} onChange={(e) => {setbio(e.target.value); setDirty();}} />
                         <Form.Text className="text-muted">
                             Hint: Your schooling, collage, Native place, hobbies, intrests etc.
                         </Form.Text>
@@ -139,6 +145,33 @@ function EditProfile(props) {
                         ))
                     }
                     <br /><br />
+                    <Form.Label>Payment Info</Form.Label>
+                    <Form.Row>
+                        <Form.Group as={Col} md={6} sm={12}>
+                            <InputGroup className="mb-3">
+                                <InputGroup.Prepend>
+                                    <InputGroup.Text style={{ fontSize: '20px' }}><AiOutlineGoogle /></InputGroup.Text>
+                                </InputGroup.Prepend>
+                                <FormControl
+                                    type="number"
+                                    value={payment.gpay}
+                                    onChange={(e) => {setpayment({ ...payment, 'gpay': e.target.value }); setDirty();}}
+                                    placeholder="enter gpay number" />
+                            </InputGroup>
+                        </Form.Group>
+                        <Form.Group as={Col} md={6} sm={12}>
+                            <InputGroup className="mb-3">
+                                <InputGroup.Prepend>
+                                    <InputGroup.Text style={{ fontSize: '16px', fontWeight: 'bold' }}>पे</InputGroup.Text>
+                                </InputGroup.Prepend>
+                                <FormControl
+                                    type="number"
+                                    value={payment.phonepe}
+                                    onChange={(e) => {setpayment({ ...payment, 'phonepe': e.target.value }); setDirty();}}
+                                    placeholder="enter phonepe number" />
+                            </InputGroup>
+                        </Form.Group>
+                    </Form.Row>
                     <Form.Label>Link Social media</Form.Label>
                     <Form.Row>
                         <Form.Group as={Col} md={6} sm={12} controlId="formGridCity">
@@ -148,7 +181,7 @@ function EditProfile(props) {
                                 </InputGroup.Prepend>
                                 <FormControl
                                     value={twitter}
-                                    onChange={(e) => settwitter(e.target.value)}
+                                    onChange={(e) => {settwitter(e.target.value); setDirty();}}
                                     placeholder="enter twitter username"
                                     aria-label="Twitter"
                                     aria-describedby="basic-addon1"
@@ -162,7 +195,7 @@ function EditProfile(props) {
                                 </InputGroup.Prepend>
                                 <FormControl
                                     value={facebook}
-                                    onChange={(e) => setfacebook(e.target.value)}
+                                    onChange={(e) => {setfacebook(e.target.value); setDirty();}}
                                     placeholder="enter facebook username"
                                     aria-label="facebook"
                                     aria-describedby="basic-addon1"
@@ -176,7 +209,7 @@ function EditProfile(props) {
                                 </InputGroup.Prepend>
                                 <FormControl
                                     value={instagram}
-                                    onChange={(e) => setinstagram(e.target.value)}
+                                    onChange={(e) => {setinstagram(e.target.value); setDirty();}}
                                     placeholder="enter Instagram username"
                                     aria-label="Instagram"
                                     aria-describedby="basic-addon1"
@@ -190,7 +223,7 @@ function EditProfile(props) {
                                 </InputGroup.Prepend>
                                 <FormControl
                                     value={linkedin}
-                                    onChange={(e) => setlinkedin(e.target.value)}
+                                    onChange={(e) => {setlinkedin(e.target.value); setDirty();}}
                                     placeholder="enter Linked-in username"
                                     aria-label="enter Linked-in username"
                                     aria-describedby="basic-addon1"
@@ -198,7 +231,8 @@ function EditProfile(props) {
                             </InputGroup>
                         </Form.Group>
                     </Form.Row>
-                    <Button onClick={saveProfile} className="editbtn">save changes</Button><br />
+                    <Button onClick={() => {saveProfile(); setPristine();}} className="editbtn">save changes</Button><br />
+                    {Prompt}
                 </Form>
             </Col>
         </Row>

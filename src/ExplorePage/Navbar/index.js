@@ -68,6 +68,7 @@ function NavBar(props) {
                             'profileImgUrl': result.user.photoURL,
                             'saved': [],
                             'skills': [],
+                            'payment': {'gpay': '', 'phonepe': ''},
                         })
                         props.history.push('/profile?edit=true')
                     }
