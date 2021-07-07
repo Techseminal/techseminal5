@@ -3,7 +3,7 @@ import { firestore, signInWithGoogle } from '../firebase/firebase-utils'
 import { withRouter } from 'react-router'
 import { Container, Image, Row, Button, Card, Badge } from 'react-bootstrap'
 import { usePalette } from 'react-palette'
-import { AiOutlineStar, AiOutlineSave, AiOutlineShareAlt, AiFillFacebook, AiOutlineTwitter, AiFillStar, AiFillSave, AiOutlineSend, AiFillLinkedin, AiFillInstagram, AiFillMail, AiOutlineTeam } from 'react-icons/ai'
+import { AiOutlineStar, AiOutlineSave, AiOutlineGoogle, AiOutlineShareAlt, AiFillFacebook, AiOutlineTwitter, AiFillStar, AiFillSave, AiOutlineSend, AiFillLinkedin, AiFillInstagram, AiFillMail, AiOutlineTeam } from 'react-icons/ai'
 import Loader from '../components/Loader'
 import './FullBlog.scss'
 import StepProgressBar from '../components/StepProgressBar'
@@ -16,17 +16,17 @@ function FullPortray(props) {
     const portrayId = props.match.params.id;
     const [Title, setTitle] = useState('');
     const [discrp, setdiscrp] = useState('');
-    const [author, setauthor] = useState('');
     const [image, setimage] = useState('');
+    const [timestamp, settimestamp] = useState(null);
+    const [author, setauthor] = useState('');
     const [stars, setstars] = useState([]);
     const [notifications, setnotifications] = useState([]);
     const [tags, setTags] = useState([]);
-    // current user data
-    // const [saved, setsaved] = useState([]);
+    const [UID, setUID] = useState('');
 
     // Author data
-    const [UID, setUID] = useState('');
     const [Mail, setMail] = useState('');
+    const [payment, setpayment] = useState({});
     const [Facebook, setFacebook] = useState('');
     const [Instagram, setInstagram] = useState('');
     const [Twitter, setTwitter] = useState('');
@@ -38,6 +38,7 @@ function FullPortray(props) {
             setTitle(doc.data().title)
             setdiscrp(doc.data().discrp)
             setimage(doc.data().image)
+            settimestamp(new Date(doc.data().timestamp))    
             setauthor(doc.data().author)
             setUID(doc.data().userUID)
             setstars(doc.data().stars)
@@ -57,6 +58,7 @@ function FullPortray(props) {
         if (UID !== '') {
             firestore.collection('Users').doc(UID).onSnapshot(doc => {
                 setMail(doc.data().mail)
+                setpayment(doc.data().payment)
                 setFacebook(doc.data().facebook)
                 setInstagram(doc.data().instagram)
                 setTwitter(doc.data().twitter)
@@ -110,6 +112,8 @@ function FullPortray(props) {
         }
     }
 
+    const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
     return (
         <>
             <Row className="FullBlog">
@@ -123,7 +127,7 @@ function FullPortray(props) {
                             <img src="https://png.pngtree.com/png-vector/20190625/ourlarge/pngtree-business-male-user-avatar-vector-png-image_1511454.jpg" alt="" height="24px" />
                             <div>
                                 <strong>{author}</strong>
-                                <p>Posted on <cite>22nd May 2021</cite></p>
+                                {timestamp ? <p>Posted on <cite>{timestamp.getDate()}&nbsp;{months[timestamp.getMonth()]}&nbsp;{timestamp.getFullYear()}</cite></p>: null}
                             </div>
                         </div>
                         <div className="Actions">
@@ -154,16 +158,16 @@ function FullPortray(props) {
                                 : <div><AiOutlineTeam style={{ color: data.vibrant }} />&nbsp;&nbsp;Team request</div>}
                         </Button>
                     </Row>
-                    <div style={{margin:'100px 10px'}}>
-                        <StepProgressBar stage={25} />
+                    <div style={{ margin: '100px 10px' }}>
+                        <StepProgressBar stage="25" />
                     </div>
                     {/* Donate section  */}
                     <Card className="Donate">
                         <Card.Body>
                             <p><cite>Loved his work?</cite> <strong style={{ color: data.vibrant }}>Donate now... 😇</strong></p>
                             <div>
-                                <Button className="Googlepay">Google pay</Button>
-                                <Button className="Phonepe">Phonepe</Button>
+                                <Button className="Googlepay"><AiOutlineGoogle style={{ fontSize: '25px' }} />&nbsp;{payment.gpay}</Button>
+                                <Button className="Phonepe"><span style={{ fontSize: '18px', fontWeight: 'bold' }}>पे</span>&nbsp;&nbsp;{payment.phonepe}</Button>
                             </div>
                         </Card.Body>
                     </Card>
@@ -174,10 +178,10 @@ function FullPortray(props) {
                     <div className="SocialMedia">
                         <p>Follow <strong style={{ color: data.vibrant }}>{author}</strong> on</p>
                         <div>
-                            <a href={Facebook} target="_blank" rel="noreferrer"><Button variant="light" title="Facebook"><AiFillFacebook style={{ color: data.vibrant }} /></Button></a>
-                            <a href={Twitter} target="_blank" rel="noreferrer"><Button variant="light" title="Twitter"><AiOutlineTwitter style={{ color: data.vibrant }} /></Button></a>
-                            <a href={Instagram} target="_blank" rel="noreferrer"><Button variant="light" title="Instagram"><AiFillInstagram style={{ color: data.vibrant }} /></Button></a>
-                            <a href={LinkedIn} target="_blank" rel="noreferrer"><Button variant="light" title="Linked-in"><AiFillLinkedin style={{ color: data.vibrant }} /></Button></a>
+                            <a href={'https://www.facebook.com/' + Facebook} target="_blank" rel="noreferrer"><Button variant="light" title="Facebook"><AiFillFacebook style={{ color: data.vibrant }} /></Button></a>
+                            <a href={'https://www.twitter.com/' + Twitter} target="_blank" rel="noreferrer"><Button variant="light" title="Twitter"><AiOutlineTwitter style={{ color: data.vibrant }} /></Button></a>
+                            <a href={'https://www.instagram.com/' + Instagram} target="_blank" rel="noreferrer"><Button variant="light" title="Instagram"><AiFillInstagram style={{ color: data.vibrant }} /></Button></a>
+                            <a href={'https://www.linkedin.com/in/' + LinkedIn} target="_blank" rel="noreferrer"><Button variant="light" title="Linked-in"><AiFillLinkedin style={{ color: data.vibrant }} /></Button></a>
                             <a href={"mailto:" + Mail}><Button variant="light" title="Mail"><AiFillMail style={{ color: data.vibrant }} /></Button></a>
                         </div>
                     </div>

@@ -41,20 +41,20 @@ function Section1(props) {
                 <br />
                 <p style={{ maxWidth: '400px' }}>
                     <strong>About you</strong><br />
-                    <span style={{ fontSize: '14px', color: 'grey' }}>
+                    <span style={{ fontSize: '18px', color: 'grey' }}>
                         {bio}
                     </span>
                 </p>
                 <div style={{ maxWidth: '500px', }}>
                     {skills.map(skill => <Badge key={skill} pill className="badge">{skill}</Badge>)}
                 </div>
-                <div style={{ margin: '20px 0' }}>
+                {twitter === '' && facebook === '' && instagram === '' && linkedin === '' ? null : <div style={{ margin: '20px 0' }}>
                     Social Media:&nbsp;
                     {twitter === '' ? null : <a href={'https://www.twitter.com/' + twitter} target="_blank" rel="noreferrer"><i><AiOutlineTwitter /></i></a>}
                     {facebook === '' ? null : <a href={'https://www.facebook.com/' + facebook} target="_blank" rel="noreferrer"><i><AiFillFacebook /></i></a>}
                     {instagram === '' ? null : <a href={'https://www.instagram.com/' + instagram} target="_blank" rel="noreferrer"><i><AiOutlineInstagram /></i></a>}
                     {linkedin === '' ? null : <a href={'https://www.linkedin.com/in/' + linkedin} target="_blank" rel="noreferrer"><i><AiOutlineLinkedin /></i></a>}
-                </div>
+                </div>}
             </Col>
         </Row>
     )
