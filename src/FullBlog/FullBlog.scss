@@ -1,23 +1,23 @@
 @import "../global.scss";
 
 .FullBlog {
-    margin:5px;
+    margin: 5px;
     padding-bottom: 50px;
     header {
         display: flex;
         justify-content: space-between;
         align-items: center;
         flex-wrap: wrap;
-        margin-top:30px;
-        @media screen and (max-width:575px) {
-            margin-top:0;
+        margin-top: 30px;
+        @media screen and (max-width: 575px) {
+            margin-top: 0;
         }
         .UserAvatar {
             display: flex;
             align-items: center;
-            margin:20px;
-            @media screen and (max-width:575px) {
-                margin:20px 0;
+            margin: 20px;
+            @media screen and (max-width: 575px) {
+                margin: 20px 0;
             }
             img {
                 height: auto;
@@ -36,14 +36,14 @@
                 }
             }
         }
-        .Actions{
-            margin:20px;
-            @media screen and (max-width:575px) {
-                margin:20px 0;
+        .Actions {
+            margin: 20px;
+            @media screen and (max-width: 575px) {
+                margin: 20px 0;
             }
-            button{
-                margin:0 10px;
-                box-shadow: 4px 5px 10px rgba(0,0,0,0.1);
+            button {
+                margin: 0 10px;
+                box-shadow: 4px 5px 10px rgba(0, 0, 0, 0.1);
             }
         }
     }
@@ -51,70 +51,150 @@
         margin-top: 20px;
         .CoverPhoto {
             border-radius: 20px;
-            width:100% !important;
+            width: 100% !important;
         }
         .Title {
             font-size: 25px;
             font-family: "Poppins", sans-serif;
             margin: 30px 0;
             font-weight: 800;
-            @media screen and (max-width:765px) {
+            @media screen and (max-width: 765px) {
                 font-size: 20px;
             }
         }
-        .descrip{
-            color:rgb(85, 83, 83);
+        .descrip {
+            color: rgb(85, 83, 83);
             font-size: 16px;
             letter-spacing: 0.5px;
             line-height: 25px;
-            @media screen and (max-width:575px) {
+            @media screen and (max-width: 575px) {
                 font-size: 14px;
             }
         }
     }
 
-    .TeamRequestBtn{
-        float:right;
+    .TeamRequestBtn {
+        float: right;
         border-radius: 25px;
     }
-    .Donate{
+    .Donate {
         margin: 50px 0;
         align-items: center;
-        button{
+        button {
             font-size: 14px;
-            margin:0 10px;
-            color:#fff;
-            border:none;
+            margin: 0 10px;
+            color: #fff;
+            border: none;
         }
-        .Phonepe{
-            background-color: #6539B5;
+        .Phonepe {
+            background-color: #6539b5;
         }
     }
 
-    .Divider{
-        margin:20px 0;
+    .Divider {
+        margin: 20px 0;
         margin-top: 100px;
         text-align: center;
-        img{
-            height:150px;
+        img {
+            height: 150px;
             border-radius: 50%;
             margin-top: -95px;
-            padding:20px;
+            padding: 20px;
             background-color: #fff;
-            @media screen and (max-width:765px) {
-                height:100px;
+            @media screen and (max-width: 765px) {
+                height: 100px;
                 margin-top: -70px;
             }
         }
     }
-    .SocialMedia{
+    .SocialMedia {
         text-align: center;
-        a{
-            margin:10px;
+        a {
+            margin: 10px;
             margin-left: 0;
-            box-shadow: 4px 5px 10px rgba(0,0,0,0.1);
-            @media screen and (max-width:575px) {
+            box-shadow: 4px 5px 10px rgba(0, 0, 0, 0.1);
+            @media screen and (max-width: 575px) {
                 font-size: 14px;
+            }
+        }
+    }
+    .Reviews {
+        .PostReviewField {
+            margin: 20px 0;
+            display: flex;
+            .commentField {
+                width: 100%;
+                border: none;
+                padding: 10px 20px;
+                background-color: #f8f9fa;
+                border-radius: 25px 0 0 25px;
+                outline: none;
+            }
+            .sendBtn {
+                padding: 10px 30px;
+                border-radius: 0 25px 25px 0;
+            }
+        }
+        .AllComments {
+            margin: 50px 0;
+            .UserAvatar {
+                display: flex;
+                align-items: center;
+                img {
+                    height: auto;
+                    border-radius: 50%;
+                    max-width: 40px;
+                    width: 100% auto;
+                }
+                strong {
+                    margin: 0 10px;
+                    font-size: 14px;
+                }
+                p {
+                    margin: 0 10px;
+                    color: gray;
+                    font-size: 12px;
+                    cite {
+                        font-weight: 600;
+                    }
+                }
+            }
+            .CommentText {
+                margin: 10px 0;
+                font-size: 14px;
+                background-color: rgb(245, 245, 255);
+                padding: 10px 20px;
+                border-radius: 10px;
+            }
+            .CommentActions {
+                display: flex;
+                justify-content: flex-end;
+                p {
+                    color: gray;
+                    font-size: 14px;
+                    span {
+                        margin: 0 10px;
+                        cursor: pointer;
+                    }
+                }
+            }
+            .RepliesSection {
+                float:right;
+                p {
+                    border: 1px solid #adabab;
+                    padding:5px 10px;
+                    border-radius: 10px;
+                    font-size: 14px;
+                    strong{
+                        cursor: pointer;
+                        &:hover{
+                            text-decoration: underline;
+                        }
+                    }
+                    span{
+                        color: #4385F3;
+                    }
+                }
             }
         }
     }

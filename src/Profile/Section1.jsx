@@ -41,12 +41,12 @@ function Section1(props) {
                 <br />
                 <p style={{ maxWidth: '400px' }}>
                     <strong>About you</strong><br />
-                    <span style={{ fontSize: '18px', color: 'grey' }}>
-                        <pre>{bio}</pre>
+                    <span style={{ fontSize: '14px', color: 'grey' }}>
+                        {bio}
                     </span>
                 </p>
                 <div style={{ maxWidth: '500px', }}>
-                    {skills.map(skill => <Badge pill className="badge">{skill}</Badge>)}
+                    {skills.map(skill => <Badge key={skill} pill className="badge">{skill}</Badge>)}
                 </div>
                 <div style={{ margin: '20px 0' }}>
                     Social Media:&nbsp;

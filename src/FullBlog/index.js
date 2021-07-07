@@ -7,6 +7,7 @@ import { AiOutlineStar, AiOutlineSave, AiOutlineShareAlt, AiFillFacebook, AiOutl
 import Loader from '../components/Loader'
 import './FullBlog.scss'
 import StepProgressBar from '../components/StepProgressBar'
+import Reviews from './Reviews'
 
 function FullPortray(props) {
     // Loader
@@ -154,7 +155,7 @@ function FullPortray(props) {
                         </Button>
                     </Row>
                     <div style={{margin:'100px 10px'}}>
-                        <StepProgressBar stage="25" />
+                        <StepProgressBar stage={25} />
                     </div>
                     {/* Donate section  */}
                     <Card className="Donate">
@@ -180,6 +181,10 @@ function FullPortray(props) {
                             <a href={"mailto:" + Mail}><Button variant="light" title="Mail"><AiFillMail style={{ color: data.vibrant }} /></Button></a>
                         </div>
                     </div>
+
+                    {/* Reviews */}
+                    <br/>
+                    <Reviews user={props.user} theme={data.vibrant}/>
                 </Container>
             </Row>
         </>

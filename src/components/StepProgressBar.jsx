@@ -1,5 +1,5 @@
 import React from 'react'
-import "react-step-progress-bar/styles.scss";
+import "react-step-progress-bar/styles.css";
 import { ProgressBar, Step } from "react-step-progress-bar";
 import IdeaStage from '../assets/icons/idea.png'
 import Research from '../assets/icons/market-research.png'
