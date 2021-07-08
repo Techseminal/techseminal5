@@ -210,10 +210,10 @@ function FullPortray(props) {
                             <a href={"mailto:" + Mail}><Button variant="light" title="Mail"><AiFillMail style={{ color: data.vibrant }} /></Button></a>
                         </div>
                     </div>
-                    {props.user ? props.user.uid === UID ? <Button className="floatingBtn" onClick={() => props.history.push('/editpost?id=' + portrayId)}><BiEdit/></Button> : null : null}
+                    {props.user?.uid === UID ? <Button className="floatingBtn" onClick={() => props.history.push('/editpost?id=' + portrayId)}><BiEdit/></Button> : null}
                     {/* Reviews */}
                     <br/>
-                    <Reviews user={props.user} theme={data.vibrant}/>
+                    <Reviews user={props.user} theme={data.vibrant} id={portrayId}/>
                 </Container>
             </Row>
         </>
