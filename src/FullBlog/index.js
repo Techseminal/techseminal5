@@ -8,6 +8,7 @@ import { AiOutlineStar, AiOutlineSave, AiOutlineGoogle, AiOutlineShareAlt, AiFil
 import Loader from '../components/Loader'
 import './FullBlog.scss'
 import StepProgressBar from '../components/StepProgressBar'
+import Reviews from './Reviews'
 
 function FullPortray(props) {
     // Loader
@@ -210,6 +211,9 @@ function FullPortray(props) {
                         </div>
                     </div>
                     {props.user ? props.user.uid === UID ? <Button className="floatingBtn" onClick={() => props.history.push('/editpost?id=' + portrayId)}><BiEdit/></Button> : null : null}
+                    {/* Reviews */}
+                    <br/>
+                    <Reviews user={props.user} theme={data.vibrant}/>
                 </Container>
             </Row>
         </>

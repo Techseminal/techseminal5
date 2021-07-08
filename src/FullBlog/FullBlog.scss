@@ -135,4 +135,84 @@
         font-size: 25px;
         z-index: 999;
     }
+    .Reviews {
+        .PostReviewField {
+            margin: 20px 0;
+            display: flex;
+            .commentField {
+                width: 100%;
+                border: none;
+                padding: 10px 20px;
+                background-color: #f8f9fa;
+                border-radius: 25px 0 0 25px;
+                outline: none;
+            }
+            .sendBtn {
+                padding: 10px 30px;
+                border-radius: 0 25px 25px 0;
+            }
+        }
+        .AllComments {
+            margin: 50px 0;
+            .UserAvatar {
+                display: flex;
+                align-items: center;
+                img {
+                    height: auto;
+                    border-radius: 50%;
+                    max-width: 40px;
+                    width: 100% auto;
+                }
+                strong {
+                    margin: 0 10px;
+                    font-size: 14px;
+                }
+                p {
+                    margin: 0 10px;
+                    color: gray;
+                    font-size: 12px;
+                    cite {
+                        font-weight: 600;
+                    }
+                }
+            }
+            .CommentText {
+                margin: 10px 0;
+                font-size: 14px;
+                background-color: rgb(245, 245, 255);
+                padding: 10px 20px;
+                border-radius: 10px;
+            }
+            .CommentActions {
+                display: flex;
+                justify-content: flex-end;
+                p {
+                    color: gray;
+                    font-size: 14px;
+                    span {
+                        margin: 0 10px;
+                        cursor: pointer;
+                    }
+                }
+            }
+            .RepliesSection {
+                float: right;
+                p {
+                    border: 1px solid #adabab;
+                    padding: 5px 10px;
+                    border-radius: 10px;
+                    font-size: 14px;
+                    strong {
+                        cursor: pointer;
+                        &:hover {
+                            text-decoration: underline;
+                        }
+                    }
+                    span {
+                        color: #4385f3;
+                    }
+                }
+            }
+        }
+    }
 }

@@ -82,7 +82,7 @@ function Section1(props) {
                     </span>
                 </p>
                 <div style={{ maxWidth: '500px', }}>
-                    {skills.map(skill => <Badge pill key={skill} className="badge">{skill}</Badge>)}
+                    {skills.map(skill => <Badge key={skill} pill className="badge">{skill}</Badge>)}
                 </div>
                 {twitter === '' && facebook === '' && instagram === '' && linkedin === '' ? null : <div style={{ margin: '20px 0' }}>
                     Social Media:&nbsp;
