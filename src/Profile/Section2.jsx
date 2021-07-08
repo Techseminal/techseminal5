@@ -42,10 +42,10 @@ function Section2(props) {
             style={{ margin: '50px 0' }}
         >
             <Tab eventKey="posts" title="My Posts">
-                <Portray user={props.user} saved={props.saved} Blogs={myPosts} />
+                {myPosts.length === 0 ? <h6>NO POSTS YET!</h6> : <Portray delete={true} user={props.user} saved={props.saved} Blogs={myPosts} />}
             </Tab>
             <Tab eventKey="saved" title="Saved Posts">
-                <Portray user={props.user} saved={props.saved} Blogs={savedPosts}/>
+                {savedPosts.length === 0 ? <h6>NO SAVED POSTS YET!</h6> :<Portray user={props.user} saved={props.saved} Blogs={savedPosts}/>}
             </Tab>
         </Tabs>
     )

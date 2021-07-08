@@ -39,6 +39,10 @@ function PortrayCard(props) {
         }
     }
 
+    function deletePost(id) {
+        firestore.collection('Blogs').doc(id).delete()
+    }
+
     // eslint-disable-next-line
     const { data, loading, error } = usePalette(props.img)
     return (
@@ -69,6 +73,8 @@ function PortrayCard(props) {
                                 <Button variant="light" title="save the post" onClick={props.user ? () => updateSaved(props.id) : signInWithGoogle}>
                                     {props.user ? props.saved.find((postId) => postId === props.id) ? <AiFillSave /> : <AiOutlineSave /> : <AiOutlineSave />}</Button>
                             </div>
+                            &nbsp;
+                            {props.delete ? <Button variant="outline-danger" onClick={() => deletePost(props.id)}>Delete</Button> : null}
                         </div>
                     </footer>
                 </Card.Body>

@@ -15,6 +15,7 @@ function UploadBlog(props) {
     // Loder
     const [loader, setLoader] = useState(false)
 
+    const [username, setusername] = useState('');
     const [Category, setCategory] = useState("Choose...")
     const [Title, setTitle] = useState("")
     const [Discrip, setDiscrip] = useState("<p></p>")
@@ -42,20 +43,29 @@ function UploadBlog(props) {
         }
     }, [Title, Discrip, Tags, Progress, Category, CPhoto, Status])
 
+    // retrieving username of current user
+    useEffect(() => {
+        db.collection('Users').doc(props.user.uid).onSnapshot(user => {
+            setusername(user.data().username)
+        })
+    }, [props.user]);
+
     const UploadArticle = () => {
         setLoader(true)
-        // Add a new document in collection "cities"
         db.collection("Blogs").doc().set({
-            author: props.user.displayName,
-            userUID: props.user.uid,
-            category: Category,
             title: Title,
             discrp: Discrip,
-            image: CPhoto,
-            notifications: [],
-            stars: [],
+            category: Category,
+            // status: Status
             tags: Tags,
-            timestamp: Date.now()
+            image: CPhoto,
+            stars: [],
+            comments: [],
+            members: [],
+            timestamp: Date.now(),
+            userUID: props.user.uid,
+            author: username,
+            notifications: [],
         })
             .then(() => {
                 setLoader(false);
@@ -66,6 +76,42 @@ function UploadBlog(props) {
                 console.error("Error writing document: ", error);
             });
     }
+
+    const UpdateArticle = () => {
+        setLoader(true)
+        const docId = props.location.search.slice(4)
+        db.collection('Blogs').doc(docId).update({
+            category: Category,
+            title: Title,
+            discrp: Discrip,
+            tags: Tags,
+            image: CPhoto,
+            // status: Status,
+            timestamp: Date.now()
+        })
+            .then(() => {
+                setLoader(false);
+                window.alert('updated successfully')
+                props.history.push('/')
+            })
+            .catch((error) => {
+                console.error("Error writing document: ", error);
+            });
+    }
+
+    useEffect(() => {
+        const docId = props.location.search.slice(4)
+        if (props.location.search !== '') {
+            db.collection('Blogs').doc(docId).onSnapshot(blog => {
+                setCategory(blog.data().category)
+                setTitle(blog.data().title)
+                setDiscrip(blog.data().discrp)
+                setTags(blog.data().tags)
+                setCPhoto(blog.data().image)
+                // setStatus(blog.data().status)
+            })
+        }
+    }, [props.location.search]);
 
     return (
         <>
@@ -104,7 +150,7 @@ function UploadBlog(props) {
                     }
                     {
                         Progress === 100 ?
-                            <Button onClick={UploadArticle} id="uploadBtn" variant="success" style={{ fontSize: '18px', padding: '5px 30px', borderRadius: '25px', float: 'right' }}>Upload</Button>
+                            <Button onClick={props.location.pathname === '/editpost' ? UpdateArticle : UploadArticle} id="uploadBtn" variant="success" style={{ fontSize: '18px', padding: '5px 30px', borderRadius: '25px', float: 'right' }}>{props.location.pathname === '/editpost' ? 'Update' : 'Upload'}</Button>
                             : null
                     }
                     <Button onClick={() => setProgress(Progress + 20)} id="nextBtn" variant="primary" style={{ fontSize: '18px', padding: '5px 30px', borderRadius: '25px', display: 'none', float: 'right' }}>Next</Button>

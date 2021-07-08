@@ -1,23 +1,23 @@
 @import "../global.scss";
 
 .FullBlog {
-    margin:5px;
+    margin: 5px;
     padding-bottom: 50px;
     header {
         display: flex;
         justify-content: space-between;
         align-items: center;
         flex-wrap: wrap;
-        margin-top:30px;
-        @media screen and (max-width:575px) {
-            margin-top:0;
+        margin-top: 30px;
+        @media screen and (max-width: 575px) {
+            margin-top: 0;
         }
         .UserAvatar {
             display: flex;
             align-items: center;
-            margin:20px;
-            @media screen and (max-width:575px) {
-                margin:20px 0;
+            margin: 20px;
+            @media screen and (max-width: 575px) {
+                margin: 20px 0;
             }
             img {
                 height: auto;
@@ -36,14 +36,14 @@
                 }
             }
         }
-        .Actions{
-            margin:20px;
-            @media screen and (max-width:575px) {
-                margin:20px 0;
+        .Actions {
+            margin: 20px;
+            @media screen and (max-width: 575px) {
+                margin: 20px 0;
             }
-            button{
-                margin:0 10px;
-                box-shadow: 4px 5px 10px rgba(0,0,0,0.1);
+            button {
+                margin: 0 10px;
+                box-shadow: 4px 5px 10px rgba(0, 0, 0, 0.1);
             }
         }
     }
@@ -51,71 +51,88 @@
         margin-top: 20px;
         .CoverPhoto {
             border-radius: 20px;
-            width:100% !important;
+            width: 100% !important;
         }
         .Title {
             font-size: 25px;
             font-family: "Poppins", sans-serif;
             margin: 30px 0;
             font-weight: 800;
-            @media screen and (max-width:765px) {
+            @media screen and (max-width: 765px) {
                 font-size: 20px;
             }
         }
-        .descrip{
-            color:rgb(85, 83, 83);
+        .descrip {
+            color: rgb(85, 83, 83);
             font-size: 16px;
             letter-spacing: 0.5px;
             line-height: 25px;
-            @media screen and (max-width:575px) {
+            @media screen and (max-width: 575px) {
                 font-size: 14px;
             }
         }
     }
 
-    .TeamRequestBtn{
-        float:right;
+    .TeamRequestBtn {
+        float: right;
         border-radius: 25px;
     }
-    .Donate{
+    .Donate {
         margin: 50px 0;
         align-items: center;
-        button{
+        button {
             font-size: 14px;
-            margin:0 10px;
-            color:#fff;
-            border:none;
+            margin: 0 10px;
+            color: #fff;
+            border: none;
         }
-        .Phonepe{
-            background-color: #6539B5;
+        .Phonepe {
+            background-color: #6539b5;
         }
     }
 
-    .Divider{
-        margin:20px 0;
+    .Divider {
+        margin: 20px 0;
         margin-top: 100px;
         text-align: center;
-        img{
-            height:150px;
+        img {
+            height: 150px;
             border-radius: 50%;
             margin-top: -95px;
-            padding:20px;
+            padding: 20px;
             background-color: #fff;
-            @media screen and (max-width:765px) {
-                height:100px;
+            @media screen and (max-width: 765px) {
+                height: 100px;
                 margin-top: -70px;
             }
         }
     }
-    .SocialMedia{
+    .SocialMedia {
         text-align: center;
-        a{
-            margin:10px;
+        a {
+            margin: 10px;
             margin-left: 0;
-            box-shadow: 4px 5px 10px rgba(0,0,0,0.1);
-            @media screen and (max-width:575px) {
+            box-shadow: 4px 5px 10px rgba(0, 0, 0, 0.1);
+            @media screen and (max-width: 575px) {
                 font-size: 14px;
             }
         }
+    }
+    .floatingBtn {
+        position: fixed;
+        bottom: 32px;
+        right: 32px;
+        border-radius: 50%;
+        width: 60px;
+        height: 60px;
+        color: #fff;
+        background-color: #057bd0;
+        outline: none;
+        border: none;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 25px;
+        z-index: 999;
     }
 }
