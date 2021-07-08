@@ -62,22 +62,32 @@ body {
     }
 }
 
+// custom-modal
 .modal-custom {
+    position:fixed;
     width: 100% !important;
     height: 100% !important;
     margin: 0;
+    padding:0;
     top: 0;
     left: 0;
-    bottom: 0;
     background-color: rgba(0, 0, 0, 0.7);
     z-index: 999;
-    position: absolute;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #fff;
     overflow: hidden;
+    .modal-body{
+        max-width:720px;
+        margin:10px;
+        width:100%;
+        min-height:200px;
+        background-color: #fff;
+        border-radius: 10px;
+    }
 }
+
+// progress bar styling
 .ProgressImg {
     margin: 100px 10px;
     background-color: #fff;

@@ -31,6 +31,7 @@ function FullPortray(props) {
     const [Instagram, setInstagram] = useState('');
     const [Twitter, setTwitter] = useState('');
     const [LinkedIn, setLinkedIn] = useState('');
+    
     // current Blog data
     useEffect(() => {
         setLoader(true)
@@ -159,7 +160,7 @@ function FullPortray(props) {
                         </Button>
                     </Row>
                     <div style={{ margin: '100px 10px' }}>
-                        <StepProgressBar stage="25" />
+                        <StepProgressBar stage={25} />
                     </div>
                     {/* Donate section  */}
                     <Card className="Donate">

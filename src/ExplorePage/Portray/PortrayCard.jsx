@@ -1,21 +1,22 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Card, Button, Badge } from 'react-bootstrap'
 import './Portray.scss'
 import firebase, { firestore, signInWithGoogle } from '../../firebase/firebase-utils';
 import { withRouter } from "react-router-dom";
 import { AiOutlineStar, AiOutlineSave, AiFillStar, AiFillSave } from 'react-icons/ai'
 import { usePalette } from 'react-palette'
+import DisplayProfile from '../../components/DisplayProfile';
 
 function PortrayCard(props) {
 
     const PushId = () => {
         props.history.push('/' + props.id)
-        window.scrollTo(0,0)
+        window.scrollTo(0, 0)
     }
 
     function updateStars(id) {
         if (props.stars.find((uid) => uid === props.user.uid)) {
-            firestore.collection('Blogs').doc(id).update({  
+            firestore.collection('Blogs').doc(id).update({
                 'stars': firebase.firestore.FieldValue.arrayRemove(props.user.uid)
             })
         }
@@ -27,7 +28,7 @@ function PortrayCard(props) {
     }
 
     function updateSaved(id) {
-        if(props.saved.find((postId) => postId === props.id)) {
+        if (props.saved.find((postId) => postId === props.id)) {
             firestore.collection('Users').doc(props.user.uid).update({
                 'saved': firebase.firestore.FieldValue.arrayRemove(id)
             })
@@ -35,14 +36,25 @@ function PortrayCard(props) {
         else {
             firestore.collection('Users').doc(props.user.uid).update({
                 'saved': firebase.firestore.FieldValue.arrayUnion(id)
-            }) 
+            })
         }
     }
 
     // eslint-disable-next-line
     const { data, loading, error } = usePalette(props.img)
+
+    // setting DisplayProfile state
+    const [Modal, setModal] = useState(false)
+    const [User, setUser] = useState(null)
+
+    const handleProfile = () => {
+        setUser(props.user); 
+        setModal(true);
+    }
+
     return (
         <>
+            <DisplayProfile state={Modal} user={User} />
             <Card style={{ borderRadius: '20px', cursor: 'pointer', border: '1px solid #D2EBEE' }} className="PortrayCard">
                 <Card.Img style={{ borderTopLeftRadius: '20px', borderTopRightRadius: '20px', width: '100%' }} variant="top" src={props.img} onClick={PushId} />
                 <Card.Body>
@@ -56,8 +68,8 @@ function PortrayCard(props) {
                     </div>
                     <footer>
                         <div className="UserAvatar">
-                            <img src="https://png.pngtree.com/png-vector/20190625/ourlarge/pngtree-business-male-user-avatar-vector-png-image_1511454.jpg" style={{border:`2px solid ${data.vibrant}`,padding:'2px',width:'32px',height:'32px'}} alt="" />
-                            <p>{props.author}</p>
+                            <img src="https://png.pngtree.com/png-vector/20190625/ourlarge/pngtree-business-male-user-avatar-vector-png-image_1511454.jpg" style={{ border: `2px solid ${data.vibrant}`, padding: '2px', width: '32px', height: '32px' }} alt="" />
+                            <p onClick={handleProfile}>{props.author}</p>
                         </div>
                         <div className="RightSide">
                             <div className="Likes">
