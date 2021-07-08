@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from 'react'
 import firebase, { firestore, signInWithGoogle } from '../firebase/firebase-utils'
-import { Button } from 'react-bootstrap'
+import { Button, Accordion } from 'react-bootstrap'
+import { AiOutlineHeart, AiOutlineSend, AiFillHeart } from 'react-icons/ai'
 
 function RepliesModel() {
     return (
         <div className="RepliesSection">
             <p>
-                <strong>user123</strong>
+                <strong>user123 <span>to</span> TechSeminal</strong>
                 &nbsp;&nbsp;
                 Lorem ipsum dolor, sit amet consectetur adipisicing elit. Blanditiis.
                 &nbsp;&nbsp;
-                <span>reply</span>
+                <span style={{cursor:'pointer'}}>reply</span>
             </p>
             <p>
                 <strong>user123</strong>
@@ -24,27 +25,50 @@ function RepliesModel() {
 }
 
 function CommentModel(props) {
-    const [show, setshow] = useState(false);
+    const [like, setlike] = useState(false)
+
+    const handleLike = () => {
+        setlike(!like)
+    }
     return (
-        <>
-            <div className="UserAvatar" style={{ color: props.theme }}>
-                <img src={props.profile} alt="" height="24px" />
-                <div>
-                    <strong>{props.username}</strong>
-                    <p><cite>{props.time}</cite></p>
+        <div className="CommentModal">
+            <div className="commentHeader">
+                <div className="UserAvatar" style={{ color: props.theme }}>
+                    <img src="https://png.pngtree.com/png-vector/20190625/ourlarge/pngtree-business-male-user-avatar-vector-png-image_1511454.jpg" alt="" height="24px" />
+                    <div>
+                        <strong>{props.user.displayName}</strong>
+                        <p><cite>{"2d"} ago</cite></p>
+                    </div>
+                </div>
+                <div className="CommentActions">
+                    <p onClick={handleLike}>
+                        {
+                            like ?
+                            <AiFillHeart style={{fontSize:'16px', color:'tomato'}} />
+                            :<AiOutlineHeart style={{ fontSize: '16px' }} />
+                        }
+                        &nbsp;{3}
+                    </p>
                 </div>
             </div>
-            <p className="CommentText">{props.comment}</p>
-            <div className="CommentActions">
-                <p>
-                    <span>{3} likes</span>
-                    <span onClick={() => setshow(!show)}>{10} replies</span>
-                </p>
-            </div>
-            {show ? <div className="Allreplies" style={{ height: 'auto', overflowY: 'auto' }}>
-                <RepliesModel />
-            </div> : null}
-        </>
+            <p className="CommentText">Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci itaque consequatur veritatis maiores explicabo rerum nisi animi laudantium repudiandae debitis consequuntur impedit sed iusto, odit, inventore aspernatur labore placeat ipsa.</p>
+            <Accordion>
+                <div className="AccordinHeader">
+                    <div style={{ display: 'flex', alignItems: 'center', borderBottom: '1px solid gray', maxWidth: '500px', width: '100%', marginBottom: '10px' }}>
+                        <AiOutlineSend style={{ color: 'blue' }} />
+                        <input style={{}} type="text" placeholder="reply..." />
+                    </div>
+                    <Accordion.Toggle as='p' style={{ cursor: 'pointer', margin: '10px 0' }} variant="link" eventKey="0">
+                        <cite>-- view {10} replies --</cite>
+                    </Accordion.Toggle>
+                </div>
+                <p></p>
+                <Accordion.Collapse eventKey="0">
+                    <RepliesModel />
+                </Accordion.Collapse>
+            </Accordion>
+            <br />
+        </div>
     )
 }
 

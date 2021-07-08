@@ -184,7 +184,7 @@ function FullPortray(props) {
                         </Button>
                     </Row>
                     <div style={{ margin: '100px 10px' }}>
-                        <StepProgressBar stage="25" />
+                        <StepProgressBar stage={25} />
                     </div>
                     {/* Donate section  */}
                     <Card className="Donate">
