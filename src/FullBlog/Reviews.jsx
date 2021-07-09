@@ -49,7 +49,7 @@ function CommentModel(props) {
                 <div className="AccordinHeader">
                     <div style={{ display: 'flex', alignItems: 'center', borderBottom: '1px solid gray', maxWidth: '500px', width: '100%', marginBottom: '10px' }}>
                         <AiOutlineSend style={{ color: 'blue' }} />
-                        <input style={{}} type="text" placeholder="reply..." />
+                        <input type="text" placeholder="send reply..." />
                     </div>
                     <Accordion.Toggle as='p' style={{ cursor: 'pointer', margin: '10px 0' }} variant="link" eventKey="0">
                         <cite>-- view {10} replies --</cite>
