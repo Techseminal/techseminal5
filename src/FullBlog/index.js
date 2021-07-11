@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import { firestore, signInWithGoogle } from '../firebase/firebase-utils'
+import firebase, { firestore, signInWithGoogle } from '../firebase/firebase-utils'
 import { withRouter } from 'react-router'
 import { Container, Image, Row, Button, Card, Badge } from 'react-bootstrap'
 import { usePalette } from 'react-palette'
+import { BiEdit } from 'react-icons/bi'
 import { AiOutlineStar, AiOutlineSave, AiOutlineGoogle, AiOutlineShareAlt, AiFillFacebook, AiOutlineTwitter, AiFillStar, AiFillSave, AiOutlineSend, AiFillLinkedin, AiFillInstagram, AiFillMail, AiOutlineTeam } from 'react-icons/ai'
 import Loader from '../components/Loader'
 import './FullBlog.scss'
@@ -23,6 +24,7 @@ function FullPortray(props) {
     const [notifications, setnotifications] = useState([]);
     const [tags, setTags] = useState([]);
     const [UID, setUID] = useState('');
+    const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
     // Author data
     const [Mail, setMail] = useState('');
@@ -31,7 +33,7 @@ function FullPortray(props) {
     const [Instagram, setInstagram] = useState('');
     const [Twitter, setTwitter] = useState('');
     const [LinkedIn, setLinkedIn] = useState('');
-    
+    const [followers, setfollowers] = useState([]);
     // current Blog data
     useEffect(() => {
         setLoader(true)
@@ -39,7 +41,7 @@ function FullPortray(props) {
             setTitle(doc.data().title)
             setdiscrp(doc.data().discrp)
             setimage(doc.data().image)
-            settimestamp(new Date(doc.data().timestamp))    
+            settimestamp(new Date(doc.data().timestamp))
             setauthor(doc.data().author)
             setUID(doc.data().userUID)
             setstars(doc.data().stars)
@@ -64,6 +66,7 @@ function FullPortray(props) {
                 setInstagram(doc.data().instagram)
                 setTwitter(doc.data().twitter)
                 setLinkedIn(doc.data().linkedIn)
+                setfollowers(doc.data().followers)
             })
         }
     }, [UID]);
@@ -108,12 +111,30 @@ function FullPortray(props) {
         if (navigator.share) {
             navigator.share({
                 title: Title,
-                url: 'https://www.techseminal.org'
+                url: 'https://www.techseminal.org/' + portrayId
             })
         }
     }
 
-    const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    function followHandler() {
+        if (followers.find((uid) => uid === props.user.uid)) {
+            firestore.collection('Users').doc(props.user.uid).update({
+                'following': firebase.firestore.FieldValue.arrayRemove(UID)
+            })
+            firestore.collection('Users').doc(UID).update({
+                'followers': firebase.firestore.FieldValue.arrayRemove(props.user.uid)
+            })
+        }
+        else {
+            firestore.collection('Users').doc(props.user.uid).update({
+                'following': firebase.firestore.FieldValue.arrayUnion(UID)
+            })
+            firestore.collection('Users').doc(UID).update({
+                'followers': firebase.firestore.FieldValue.arrayUnion(props.user.uid)
+            })
+        }
+    }
+
 
     return (
         <>
@@ -127,13 +148,17 @@ function FullPortray(props) {
                         <div className="UserAvatar" style={{ color: data.vibrant }}>
                             <img src="https://png.pngtree.com/png-vector/20190625/ourlarge/pngtree-business-male-user-avatar-vector-png-image_1511454.jpg" alt="" height="24px" />
                             <div>
-                                <strong>{author}</strong>
-                                {timestamp ? <p>Posted on <cite>{timestamp.getDate()}&nbsp;{months[timestamp.getMonth()]}&nbsp;{timestamp.getFullYear()}</cite></p>: null}
+                                <strong style={{cursor:'pointer'}}>{author} &nbsp;
+                                    {props.user ?
+                                        props.user.uid === UID ? null : followers.find((uid) => uid === props.user.uid) ? <Badge variant='primary' style={{fontWeight:'500', fontSize:'12px'}} onClick={followHandler}>Following</Badge> : <Badge variant='secondary' style={{fontWeight:'500', fontSize:'12px'}} onClick={followHandler}>Follow</Badge>
+                                        : <Badge variant='primary' style={{fontWeight:'500', fontSize:'12px'}} onClick={signInWithGoogle}>Follow</Badge>}
+                                </strong>
+                                {timestamp ? <p>Posted on <cite>{timestamp.getDate()}&nbsp;{months[timestamp.getMonth()]}&nbsp;{timestamp.getFullYear()}</cite></p> : null}
                             </div>
                         </div>
                         <div className="Actions">
                             <Button variant="light" style={{ color: data.vibrant }} onClick={props.user ? starsHandler : signInWithGoogle}>
-                                {props.user ? stars.find((uid) => uid === props.user.uid) ? <div><AiFillStar />&nbsp;&nbsp;{stars.length}</div> : <div><AiOutlineStar />&nbsp;&nbsp;Star</div> : <div><AiOutlineStar />&nbsp;&nbsp;Star</div>}
+                                <div>{props.user ? stars.find((uid) => uid === props.user.uid) ? <AiFillStar /> : <AiOutlineStar /> : <AiOutlineStar />}&nbsp;&nbsp;{stars.length}</div>
                             </Button>
                             <Button variant="light" style={{ color: data.vibrant }} onClick={props.user ? savedHandler : signInWithGoogle}>{props.saved.find((postID) => postID === portrayId) ? <AiFillSave /> : <AiOutlineSave />}</Button>
                             <Button variant="light" style={{ color: data.vibrant }} onClick={shareHandler}><AiOutlineShareAlt /></Button>
@@ -186,10 +211,10 @@ function FullPortray(props) {
                             <a href={"mailto:" + Mail}><Button variant="light" title="Mail"><AiFillMail style={{ color: data.vibrant }} /></Button></a>
                         </div>
                     </div>
-
+                    {props.user?.uid === UID ? <Button variant='primary' className="floatingBtn" onClick={() => props.history.push('/editpost?id=' + portrayId)}><BiEdit /></Button> : null}
                     {/* Reviews */}
-                    <br/>
-                    <Reviews user={props.user} theme={data.vibrant}/>
+                    <br />
+                    <Reviews user={props.user} theme={data.vibrant} id={portrayId} />
                 </Container>
             </Row>
         </>

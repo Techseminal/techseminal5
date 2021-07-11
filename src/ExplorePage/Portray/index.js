@@ -10,6 +10,7 @@ function Portray(props) {
                 {
                     props.Blogs.map(blog => (
                         <PortrayCard
+                            delete={props.delete}
                             user={props.user}
                             key={blog.id}
                             img={blog.image}
@@ -18,7 +19,9 @@ function Portray(props) {
                             tags={blog.tags}
                             stars={blog.stars}
                             saved={props.saved}
-                            id={blog.id} />
+                            id={blog.id} 
+                            uid={blog.userUID}
+                            />
                     ))
                 }
             </Col>

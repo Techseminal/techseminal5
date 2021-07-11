@@ -1,63 +1,139 @@
-import React, { useState } from 'react'
-import { signInWithGoogle } from '../firebase/firebase-utils'
+import React, { useState, useEffect } from 'react'
+import firebase, { firestore, signInWithGoogle } from '../firebase/firebase-utils'
 import { Button, Accordion } from 'react-bootstrap'
 import { AiOutlineHeart, AiOutlineSend, AiFillHeart } from 'react-icons/ai'
 
-function RepliesModel() {
+
+// replies-modal
+function RepliesModel(props) {
+    const [usernames, setusernames] = useState([]);
+
+    useEffect(() => {
+        firestore.collection('Users').onSnapshot(querySnapshot => {
+            const usernames = querySnapshot.docs.map(doc => {
+                return doc.data().username
+            })
+            setusernames(usernames)
+        })
+    }, []);
+
+    const handleReply = (username) => {
+        document.getElementById(props.cID).focus()
+        document.getElementById(props.cID).value = '@' + username + '  '
+    }
+
+    function containsAny(Reply) {
+        for (var i = 0; i !== usernames.length; i++) {
+            var username = usernames[i];
+            if (Reply.indexOf(username) !== - 1) {
+                return username;
+            }
+        }
+        return null;
+    }
+
     return (
         <div className="RepliesSection">
-            <p>
-                <strong>user123 <span>to</span> TechSeminal</strong>
-                &nbsp;&nbsp;
-                Lorem ipsum dolor, sit amet consectetur adipisicing elit. Blanditiis.
-                &nbsp;&nbsp;
-                <span style={{cursor:'pointer'}}>reply</span>
-            </p>
+            {props.replies.map(reply => {
+                const mention = containsAny(reply.reply)
+                let message = reply.reply.replace('@', '')
+                message = message.replace(mention, '')
+                return <p key={message}>
+                    <strong>{reply.username}</strong>&nbsp;<span>{' @' + mention}</span>
+                    &nbsp;
+                    {message}
+                    &nbsp;&nbsp;
+                    <span style={{ cursor: 'pointer', float: 'right' }} onClick={() => handleReply(reply.username)}>reply</span>
+                </p>
+            })}
         </div>
     )
 }
 
-function CommentModel(props) {
-    const [like, setlike] = useState(false)
+// comment-moadl
 
-    const handleLike = () => {
-        setlike(!like)
+function CommentModel(props) {
+    const [reply, setreply] = useState('@' + props.username + ' ');
+    let [Comments, setComments] = useState(null);
+
+    useEffect(() => {
+        firestore.collection('Blogs').doc(props.id).onSnapshot(blog => {
+            setComments(blog.data().comments)
+        })
+    }, [props.id]);
+
+    const submitReply = () => {
+        let index = Comments.findIndex((comment) => comment.id === props.cID)
+
+        Comments[index] = {
+            ...Comments[index],
+            'replies': [...Comments[index].replies, { 'reply': reply, 'time': Date.now(), 'username': props.name }]
+        }
+
+        firestore.collection('Blogs').doc(props.id).update({
+            'comments': Comments
+        })
+
+        setreply('')
+
     }
+    const handleLike = () => {
+        let index = Comments.findIndex((comment) => comment.id === props.cID)
+
+        if (!props.likes.find((id) => id === props.uid)) {
+            Comments[index] = {
+                ...Comments[index],
+                'likes': [...Comments[index].likes, props.uid]
+            }
+        }
+
+        else {
+            Comments[index] = {
+                ...Comments[index],
+                'likes': props.likes.filter((id) => id !== props.uid)
+            }
+        }
+
+        firestore.collection('Blogs').doc(props.id).update({
+            'comments': Comments
+        })
+    }
+
     return (
         <div className="CommentModal">
             <div className="commentHeader">
                 <div className="UserAvatar" style={{ color: props.theme }}>
-                    <img src="https://png.pngtree.com/png-vector/20190625/ourlarge/pngtree-business-male-user-avatar-vector-png-image_1511454.jpg" alt="" height="24px" />
+                    <img src={props.profile} alt="" height="24px" />
                     <div>
-                        <strong>{props.user.displayName}</strong>
+                        <strong>{props.username}</strong>
                         <p><cite>{"2d"} ago</cite></p>
                     </div>
                 </div>
                 <div className="CommentActions">
                     <p onClick={handleLike}>
                         {
-                            like ?
-                            <AiFillHeart style={{fontSize:'16px', color:'tomato'}} />
-                            :<AiOutlineHeart style={{ fontSize: '16px' }} />
+                            props.likes.find((id) => id === props.uid) ?
+                                <AiFillHeart style={{ fontSize: '16px', color: 'tomato' }} />
+                                : <AiOutlineHeart style={{ fontSize: '16px' }} />
                         }
-                        &nbsp;{3}
+                        &nbsp;{props.likes.length}
                     </p>
                 </div>
             </div>
-            <p className="CommentText">Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci itaque consequatur veritatis maiores explicabo rerum nisi animi laudantium repudiandae debitis consequuntur impedit sed iusto, odit, inventore aspernatur labore placeat ipsa.</p>
+            <p className="CommentText">{props.comment}</p>
             <Accordion>
                 <div className="AccordinHeader">
                     <div style={{ display: 'flex', alignItems: 'center', borderBottom: '1px solid gray', maxWidth: '500px', width: '100%', marginBottom: '10px' }}>
                         <AiOutlineSend style={{ color: 'blue' }} />
-                        <input type="text" placeholder="send reply..." />
+                        <input value={reply} id={props.cID} onChange={(e) => setreply(e.target.value)} onKeyUp={(e) => e.keyCode === 13 ? submitReply() : null} type="text" placeholder="Reply" />
                     </div>
                     <Accordion.Toggle as='p' style={{ cursor: 'pointer', margin: '10px 0' }} variant="link" eventKey="0">
-                        <cite>-- view {10} replies --</cite>
+                        <cite>-- view {props.replies.length} replies --</cite>
                     </Accordion.Toggle>
                 </div>
                 <p></p>
                 <Accordion.Collapse eventKey="0">
-                    <RepliesModel />
+                    <RepliesModel replies={props.replies} cID={props.cID} id={props.id} />
                 </Accordion.Collapse>
             </Accordion>
             <br />
@@ -65,15 +141,43 @@ function CommentModel(props) {
     )
 }
 
+// Reviews modal {default}
+
 function Reviews(props) {
+    const [Comment, setComment] = useState('');
+    const [comments, setcomments] = useState([]);
+    const [username, setusername] = useState('');
+    useEffect(() => {
+        firestore.collection('Blogs').doc(props.id).onSnapshot(blog => {
+            setcomments(blog.data().comments)
+        })
+        if (props.user)
+            firestore.collection('Users').doc(props.user.uid).onSnapshot(user => {
+                setusername(user.data().username)
+            })
+    }, [props.id, props.user]);
+
+    let cID = Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1)
+
+    cID = cID + cID + '-' + cID + '-' + cID + '-' + cID + '-' + cID + cID + cID
+
     const handleClick = (e) => {
         e.preventDefault();
-        let comment = document.getElementById('commentField').value;
-
-        if (comment !== "") {
-            console.log(comment);
-            document.getElementById('commentField').value = "";
+        if (Comment !== '') {
+            firestore.collection('Blogs').doc(props.id).update({
+                'comments': firebase.firestore.FieldValue.arrayUnion({
+                    'username': username,
+                    'comment': Comment,
+                    'time': new Date().toString(),
+                    'profile': props.user.photoURL,
+                    'id': cID,
+                    'likes': [],
+                    'replies': []
+                })
+            })
+            setComment('')
         }
+
     }
     return (
         <div className="Reviews">
@@ -81,19 +185,25 @@ function Reviews(props) {
             {
                 props.user ?
                     <form className="PostReviewField">
-                        <input id="commentField" type="text" placeholder='leave your comment...' className="commentField" />
+                        <input id="commentField" value={Comment} onChange={(e) => setComment(e.target.value)} type="text" placeholder='leave your comment...' className="commentField" />
                         <Button type='submit' onClick={handleClick} className="sendBtn" variant="light" style={{ color: props.theme }}>send</Button>
                     </form> : <Button onClick={signInWithGoogle}>SignIn to post reviews</Button>
             }
             <div className="AllComments">
-                {
-                    props.user ?
-                        <>
-                            <CommentModel user={props.user} />
-                            <CommentModel user={props.user} />
-                        </>
-                        : null
-                }
+                {comments.map(comment => {
+                    return <CommentModel
+                        id={props.id}
+                        uid={props.user.uid}
+                        name={username}
+                        key={comment.id}
+                        cID={comment.id}
+                        username={comment.username}
+                        comment={comment.comment}
+                        time={comment.time}
+                        likes={comment.likes}
+                        replies={comment.replies}
+                        profile={comment.profile} />
+                })}
             </div>
         </div>
     )
