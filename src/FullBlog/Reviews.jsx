@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import firebase, { firestore, signInWithGoogle } from '../firebase/firebase-utils'
 import { Button, Accordion } from 'react-bootstrap'
 import { AiOutlineHeart, AiOutlineSend, AiFillHeart, AiFillDelete } from 'react-icons/ai'
-
+import DisplayProfile from '../components/DisplayProfile'
 
 // replies-modal
 function RepliesModel(props) {
@@ -57,12 +57,22 @@ function RepliesModel(props) {
 function CommentModel(props) {
     const [reply, setreply] = useState('@' + props.username + '  ');
     let [Comments, setComments] = useState(null);
+    const [UID, setUID] = useState(null);
 
     useEffect(() => {
         firestore.collection('Blogs').doc(props.id).onSnapshot(blog => {
             setComments(blog.data().comments)
         })
     }, [props.id]);
+
+    useEffect(() => {
+        if (props.username) {
+            firestore.collection('Users').where('username', '==', props.username).get().then((user) => {
+                const uid = user.docs.map((doc) => doc.id)
+                setUID(uid[0])
+            })
+        }
+    }, [props.username]);
 
     const submitReply = () => {
         let index = Comments.findIndex((comment) => comment.id === props.cID)
@@ -154,14 +164,16 @@ function CommentModel(props) {
         return Math.floor(seconds) + " seconds";
     }
 
+    const [modal, setmodal] = useState(false);
 
     return (
         <div className="CommentModal">
+            {UID ? <DisplayProfile show={modal} closeModal={() => setmodal(false)} uid={UID} /> : null}
             <div className="commentHeader">
                 <div className="UserAvatar" style={{ color: props.theme }}>
                     <img src={props.profile} alt="" height="24px" />
                     <div>
-                        <strong>{props.username}</strong>
+                        <strong onClick={() => setmodal(true)}>{props.username}</strong>
                         <p><cite>{timeSince(props.time)} ago</cite></p>
                     </div>
                 </div>

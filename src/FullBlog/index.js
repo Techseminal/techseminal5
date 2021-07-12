@@ -9,6 +9,7 @@ import Loader from '../components/Loader'
 import './FullBlog.scss'
 import StepProgressBar from '../components/StepProgressBar'
 import Reviews from './Reviews'
+import DisplayProfile from '../components/DisplayProfile'
 
 function FullPortray(props) {
     // Loader
@@ -23,7 +24,7 @@ function FullPortray(props) {
     const [stars, setstars] = useState([]);
     const [notifications, setnotifications] = useState([]);
     const [tags, setTags] = useState([]);
-    const [UID, setUID] = useState('');
+    const [UID, setUID] = useState(null);
     const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
     // Author data
@@ -58,7 +59,7 @@ function FullPortray(props) {
     }, [portrayId]);
     // Author data
     useEffect(() => {
-        if (UID !== '') {
+        if (UID) {
             firestore.collection('Users').doc(UID).onSnapshot(doc => {
                 setMail(doc.data().mail)
                 setpayment(doc.data().payment)
@@ -135,6 +136,7 @@ function FullPortray(props) {
         }
     }
 
+    const [modal, setmodal] = useState(false);
 
     return (
         <>
@@ -144,11 +146,12 @@ function FullPortray(props) {
                 }
                 <Container>
                     {/* Header Section */}
+                    {UID ? <DisplayProfile show={modal} closeModal={() => setmodal(false)} uid={UID}/> : null}
                     <header>
                         <div className="UserAvatar" style={{ color: data.vibrant }}>
                             <img src="https://png.pngtree.com/png-vector/20190625/ourlarge/pngtree-business-male-user-avatar-vector-png-image_1511454.jpg" alt="" height="24px" />
                             <div>
-                                <strong style={{cursor:'pointer'}}>{author} &nbsp;
+                                <strong style={{cursor:'pointer'}} onClick={() => setmodal(true)}>{author} &nbsp;
                                     {props.user ?
                                         props.user.uid === UID ? null : followers.find((uid) => uid === props.user.uid) ? <Badge variant='primary' style={{fontWeight:'500', fontSize:'12px'}} onClick={followHandler}>Following</Badge> : <Badge variant='secondary' style={{fontWeight:'500', fontSize:'12px'}} onClick={followHandler}>Follow</Badge>
                                         : <Badge variant='primary' style={{fontWeight:'500', fontSize:'12px'}} onClick={signInWithGoogle}>Follow</Badge>}

@@ -6,6 +6,7 @@ import './SearchBar.scss'
 function SearchBar(props) {
     const [DataList, setDataList] = useState([]);
     const [tags, settags] = useState([]);
+    const [authors, setauthors] = useState([]);
 
     useEffect(() => {
         firestore.collection('Blogs').onSnapshot(querySnapshot => {
@@ -23,8 +24,18 @@ function SearchBar(props) {
             tags = tags.reduce((elem1, elem2) => elem1.concat(elem2))
             tags = [...new Set(tags)]
             settags(tags)
+            let authors = datalist.map((data) => {
+                return data.author
+            })
+            authors = [...new Set(authors)]
+            setauthors(authors)
         })
     }, []);
+
+    useEffect(() => {
+        const input = document.getElementById('searchKey')
+        input.value = props.searchKey
+    }, [props.searchKey]);
 
 
     return (
@@ -34,6 +45,7 @@ function SearchBar(props) {
                     <Col sm={12} md={6} lg={6} className="SearchBar">
                         <InputGroup size="md">
                             <FormControl aria-label="Medium" list="search"
+                                id="searchKey"
                                 onChange={(e) => e.target.value === '' ? props.setsearchKey('') : null}
                                 onKeyUp={(e) => e.keyCode === 13 ? props.setsearchKey(e.target.value) : null}
                                 aria-describedby="inputGroup-sizing-sm" placeholder="Search..." className="SearchField" onFocus={(e)=>e.target.value=""} />
@@ -41,9 +53,9 @@ function SearchBar(props) {
                     <datalist id="search">
                         {props.filter === 'tags' ? tags.map((tag) => <option key={tag} value={tag} />) : null}
                         {props.filter === 'title' ? DataList.map((data) => <option key={data.title} value={data.title} />) : null}
-                        {props.filter === 'user' ? DataList.map((data) => <option key={data.author} value={data.author} />) : null}
+                        {props.filter === 'user' ? authors.map((author) => <option key={author} value={author} />) : null}
                     </datalist>
-                    <select onChange={(e) => props.setfilter(e.target.value)} style={{ padding: '10px', float: 'right' }}>
+                    <select onChange={(e) => props.setfilter(e.target.value)} value={props.filter} style={{ padding: '10px', float: 'right' }}>
                         <option value="tags">Keyword</option>
                         <option value="title">Titles</option>
                         <option value="user">users</option>
