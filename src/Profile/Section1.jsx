@@ -60,7 +60,7 @@ function Section1(props) {
 
     return (
         <Row className="Section1">
-            {show ? <Modal closeModal={() => setshow(false)} profiles={data === 'followers' ? followersData : followingData} /> : null}
+            {show ? <Modal show={show} closeModal={() => setshow(false)} profiles={data === 'followers' ? followersData : followingData} title={data} /> : null}
             <Col sm={12} md={4} style={{ textAlign: 'center', padding: '0 50px' }}>
                 <Image className="photoURL" src={props.user.photoURL} alt="" /><br />
                 <Button variant='light' onClick={() => props.HEdit(true)} className="editbtn">Edit profile</Button><br />

@@ -64,11 +64,11 @@ body {
 
 // custom-modal
 .modal-custom {
-    position:fixed;
+    position: fixed;
     width: 100% !important;
     height: 100% !important;
     margin: 0;
-    padding:0;
+    padding: 0;
     top: 0;
     left: 0;
     background-color: rgba(0, 0, 0, 0.7);
@@ -77,13 +77,31 @@ body {
     align-items: center;
     justify-content: center;
     overflow: hidden;
-    .modal-body{
-        max-width:720px;
-        margin:10px;
-        width:100%;
-        min-height:200px;
+    color: #000;
+    transition:all 50ms ease-in-out;
+    .modal-body {
+        margin: 10px;
+        width: 100%;
+        min-height: 200px;
         background-color: #fff;
         border-radius: 10px;
+        animation-name: example;
+        animation-duration: 60ms;
+        transition: all ease-in-out;
+    }
+    @keyframes example {
+        0% {
+            top: -100px;
+        }
+        25% {
+            top: -75px;
+        }
+        50% {
+            top: -50px;
+        }
+        100% {
+            top: -25px;
+        }
     }
 }
 
@@ -93,14 +111,14 @@ body {
     background-color: #fff;
     padding: 5px;
     border-radius: 50%;
-    border: 1px solid #2E8BDC;
+    border: 1px solid #2e8bdc;
     width: 60px;
     transition: ease-in 0.2s;
     cursor: pointer;
-    &:hover{
+    &:hover {
         transform: scale(1.1);
     }
-    @media screen and (max-width:765px){
+    @media screen and (max-width: 765px) {
         width: 50px;
     }
 }
@@ -121,12 +139,24 @@ body {
         animation: fadein 0.5s, fadeout 0.5s 2.5s;
     }
     @keyframes fadein {
-        from {bottom: 0; opacity: 0;}
-        to {bottom: 80%; opacity: 1;}
+        from {
+            bottom: 0;
+            opacity: 0;
+        }
+        to {
+            bottom: 80%;
+            opacity: 1;
+        }
     }
 
     @keyframes fadeout {
-        from {bottom: 80%; opacity: 1;}
-        to {bottom: 0; opacity: 0;}
+        from {
+            bottom: 80%;
+            opacity: 1;
+        }
+        to {
+            bottom: 0;
+            opacity: 0;
+        }
     }
 }

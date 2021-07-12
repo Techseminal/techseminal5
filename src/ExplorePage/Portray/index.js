@@ -19,7 +19,9 @@ function Portray(props) {
                             tags={blog.tags}
                             stars={blog.stars}
                             saved={props.saved}
-                            id={blog.id} />
+                            id={blog.id} 
+                            uid={blog.userUID}
+                            />
                     ))
                 }
             </Col>

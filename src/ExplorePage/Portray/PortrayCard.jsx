@@ -3,7 +3,7 @@ import { Card, Button, Badge } from 'react-bootstrap'
 import './Portray.scss'
 import firebase, { firestore, signInWithGoogle } from '../../firebase/firebase-utils';
 import { withRouter } from "react-router-dom";
-import { AiOutlineStar, AiOutlineSave, AiFillStar, AiFillSave } from 'react-icons/ai'
+import { AiOutlineStar, AiOutlineSave, AiFillStar, AiFillSave, AiOutlineDelete } from 'react-icons/ai'
 import { usePalette } from 'react-palette'
 import DisplayProfile from '../../components/DisplayProfile';
 
@@ -48,17 +48,11 @@ function PortrayCard(props) {
     const { data, loading, error } = usePalette(props.img)
 
     // setting DisplayProfile state
-    const [Modal, setModal] = useState(false)
-    const [User, setUser] = useState(null)
-
-    const handleProfile = () => {
-        setUser(props.user); 
-        setModal(true);
-    }
+    const [modal, setModal] = useState(false)
 
     return (
         <>
-            <DisplayProfile state={Modal} user={User} />
+            <DisplayProfile show={modal} closeModal={()=>setModal(false)} uid={props.uid} />
             <Card style={{ borderRadius: '20px', cursor: 'pointer', border: '1px solid #D2EBEE' }} className="PortrayCard">
                 <Card.Img style={{ borderTopLeftRadius: '20px', borderTopRightRadius: '20px', width: '100%' }} variant="top" src={props.img} onClick={PushId} />
                 <Card.Body>
@@ -73,7 +67,7 @@ function PortrayCard(props) {
                     <footer>
                         <div className="UserAvatar">
                             <img src="https://png.pngtree.com/png-vector/20190625/ourlarge/pngtree-business-male-user-avatar-vector-png-image_1511454.jpg" style={{ border: `2px solid ${data.vibrant}`, padding: '2px', width: '32px', height: '32px' }} alt="" />
-                            <p onClick={handleProfile}>{props.author}</p>
+                            <p onClick={() => setModal(true)}>{props.author}</p>
                         </div>
                         <div className="RightSide">
                             <div className="Likes">
@@ -86,7 +80,7 @@ function PortrayCard(props) {
                                     {props.user ? props.saved.find((postId) => postId === props.id) ? <AiFillSave /> : <AiOutlineSave /> : <AiOutlineSave />}</Button>
                             </div>
                             &nbsp;
-                            {props.delete ? <Button variant="outline-danger" onClick={() => deletePost(props.id)}>Delete</Button> : null}
+                            {props.delete ? <Button title="Delete" variant="light" onClick={() => deletePost(props.id)}><AiOutlineDelete style={{ color: 'red' }} /></Button> : null}
                         </div>
                     </footer>
                 </Card.Body>

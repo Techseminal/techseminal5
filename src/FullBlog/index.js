@@ -148,12 +148,13 @@ function FullPortray(props) {
                         <div className="UserAvatar" style={{ color: data.vibrant }}>
                             <img src="https://png.pngtree.com/png-vector/20190625/ourlarge/pngtree-business-male-user-avatar-vector-png-image_1511454.jpg" alt="" height="24px" />
                             <div>
-                                <strong>{author}</strong>
+                                <strong style={{cursor:'pointer'}}>{author} &nbsp;
+                                    {props.user ?
+                                        props.user.uid === UID ? null : followers.find((uid) => uid === props.user.uid) ? <Badge variant='primary' style={{fontWeight:'500', fontSize:'12px'}} onClick={followHandler}>Following</Badge> : <Badge variant='secondary' style={{fontWeight:'500', fontSize:'12px'}} onClick={followHandler}>Follow</Badge>
+                                        : <Badge variant='primary' style={{fontWeight:'500', fontSize:'12px'}} onClick={signInWithGoogle}>Follow</Badge>}
+                                </strong>
                                 {timestamp ? <p>Posted on <cite>{timestamp.getDate()}&nbsp;{months[timestamp.getMonth()]}&nbsp;{timestamp.getFullYear()}</cite></p> : null}
                             </div>
-                            {props.user ?
-                                props.user.uid === UID ? null : followers.find((uid) => uid === props.user.uid) ? <Button onClick={followHandler} variant="secondary">Following</Button> : <Button onClick={followHandler}>Follow</Button>
-                                : <Button onClick={signInWithGoogle}>Follow</Button>}
                         </div>
                         <div className="Actions">
                             <Button variant="light" style={{ color: data.vibrant }} onClick={props.user ? starsHandler : signInWithGoogle}>
@@ -210,10 +211,10 @@ function FullPortray(props) {
                             <a href={"mailto:" + Mail}><Button variant="light" title="Mail"><AiFillMail style={{ color: data.vibrant }} /></Button></a>
                         </div>
                     </div>
-                    {props.user?.uid === UID ? <Button className="floatingBtn" onClick={() => props.history.push('/editpost?id=' + portrayId)}><BiEdit/></Button> : null}
+                    {props.user?.uid === UID ? <Button variant='primary' className="floatingBtn" onClick={() => props.history.push('/editpost?id=' + portrayId)}><BiEdit /></Button> : null}
                     {/* Reviews */}
-                    <br/>
-                    <Reviews user={props.user} theme={data.vibrant} id={portrayId}/>
+                    <br />
+                    <Reviews user={props.user} theme={data.vibrant} id={portrayId} />
                 </Container>
             </Row>
         </>

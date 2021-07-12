@@ -3,6 +3,8 @@ import firebase, { firestore, signInWithGoogle } from '../firebase/firebase-util
 import { Button, Accordion } from 'react-bootstrap'
 import { AiOutlineHeart, AiOutlineSend, AiFillHeart, AiFillDelete } from 'react-icons/ai'
 
+
+// replies-modal
 function RepliesModel(props) {
     const [usernames, setusernames] = useState([]);
 
@@ -50,6 +52,8 @@ function RepliesModel(props) {
     )
 }
 
+// comment-moadl
+
 function CommentModel(props) {
     const [reply, setreply] = useState('@' + props.username + '  ');
     let [Comments, setComments] = useState(null);
@@ -92,7 +96,6 @@ function CommentModel(props) {
         })
 
     }
-
     const handleLike = () => {
         let index = Comments.findIndex((comment) => comment.id === props.cID)
 
@@ -196,6 +199,8 @@ function CommentModel(props) {
         </div>
     )
 }
+
+// Reviews modal {default}
 
 function Reviews(props) {
     const [Comment, setComment] = useState('');
