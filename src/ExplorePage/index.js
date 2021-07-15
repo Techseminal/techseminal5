@@ -11,7 +11,7 @@ import Loader from '../components/Loader'
 
 function ExplorePage(props) {
     //loader
-    const [loader,setLoader] = useState(false)
+    const [loader, setLoader] = useState(false)
     const [BlogsDB, setBlogsDB] = useState([]);
     const [Blogs, setBlogs] = useState([]);
     const [filteredBlogs, setfilteredBlogs] = useState([]);
@@ -21,21 +21,21 @@ function ExplorePage(props) {
     const [filter, setfilter] = useState('tags');
     // set blogs
     useEffect(() => {
-            setLoader(true)
-            firestore.collection('Blogs').onSnapshot(querySnapshot => {
-                const blogs = querySnapshot.docs.map((doc) => {
-                    return {
-                        ...doc.data(),
-                        id: doc.id
-                    }
-                })
-                setBlogsDB(blogs)
-                setLoader(false)
+        setLoader(true)
+        firestore.collection('Blogs').onSnapshot(querySnapshot => {
+            const blogs = querySnapshot.docs.map((doc) => {
+                return {
+                    ...doc.data(),
+                    id: doc.id
+                }
             })
+            setBlogsDB(blogs)
+            setLoader(false)
+        })
     }, []);
 
     useEffect(() => {
-        if(category === 'All') {
+        if (category === 'All') {
             setBlogs(BlogsDB)
         }
         else {
@@ -98,10 +98,11 @@ function ExplorePage(props) {
             return filteredBlogs.sort((a, b) => b.stars.length - a.stars.length)
         }
     }
+
     return (
         <div className="ExplorePage">
             {
-                loader ? <Loader/> : null
+                loader ? <Loader /> : null
             }
             <Navbar user={props.user} />
             <Banner />

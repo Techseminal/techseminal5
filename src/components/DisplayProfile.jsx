@@ -1,9 +1,9 @@
 import React from 'react'
-import { AiFillCloseCircle } from 'react-icons/ai'
+import { AiFillCloseCircle} from 'react-icons/ai'
 import { firestore } from '../firebase/firebase-utils'
 import { useState, useEffect } from 'react'
 import { Badge, Button, Modal } from 'react-bootstrap'
-import { AiOutlineTwitter, AiOutlineInstagram, AiFillFacebook, AiOutlineLinkedin } from 'react-icons/ai'
+import { AiOutlineTwitter, AiFillInstagram, AiFillFacebook, AiFillLinkedin } from 'react-icons/ai'
 
 function DisplayProfile({ show, closeModal, uid }) {
 
@@ -47,8 +47,8 @@ function DisplayProfile({ show, closeModal, uid }) {
                         {user.twitter === '' && user.facebook === '' && user.instagram === '' && user.linkedin === '' ? null : <div style={{ margin: '30px 0', fontSize: '20px' }}>
                             {user.twitter === '' ? null : <Button as="a" style={{ margin: '0 10px', color: '#40A9FF' }} variant='light' href={'https://www.twitter.com/' + user.twitter} target="_blank" rel="noreferrer"><i><AiOutlineTwitter /></i></Button>}
                             {user.facebook === '' ? null : <Button as="a" style={{ margin: '0 10px', color: '#40A9FF' }} variant='light' href={'https://www.facebook.com/' + user.facebook} target="_blank" rel="noreferrer"><i><AiFillFacebook /></i></Button>}
-                            {user.instagram === '' ? null : <Button as="a" style={{ margin: '0 10px', color: '#40A9FF' }} variant='light' href={'https://www.instagram.com/' + user.instagram} target="_blank" rel="noreferrer"><i><AiOutlineInstagram /></i></Button>}
-                            {user.linkedin === '' ? null : <Button as="a" style={{ margin: '0 10px', color: '#40A9FF' }} variant='light' href={'https://www.linkedin.com/in/' + user.linkedin} target="_blank" rel="noreferrer"><i><AiOutlineLinkedin /></i></Button>}
+                            {user.instagram === '' ? null : <Button as="a" style={{ margin: '0 10px', color: '#40A9FF' }} variant='light' href={'https://www.instagram.com/' + user.instagram} target="_blank" rel="noreferrer"><i><AiFillInstagram /></i></Button>}
+                            {user.linkedin === '' ? null : <Button as="a" style={{ margin: '0 10px', color: '#40A9FF' }} variant='light' href={'https://www.linkedin.com/in/' + user.linkedin} target="_blank" rel="noreferrer"><i><AiFillLinkedin /></i></Button>}
                         </div>}
                         <hr style={{ width: '100%' }}></hr>
                         <Button variant="light" style={{ backgroundColor: '#fff', marginTop: '-36px' }}>view posts</Button>

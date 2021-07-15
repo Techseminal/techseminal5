@@ -32,6 +32,7 @@ function PortrayCard(props) {
             firestore.collection('Users').doc(props.user.uid).update({
                 'saved': firebase.firestore.FieldValue.arrayRemove(id)
             })
+            props.toast('saved')
         }
         else {
             firestore.collection('Users').doc(props.user.uid).update({
@@ -52,7 +53,7 @@ function PortrayCard(props) {
 
     return (
         <>
-            <DisplayProfile show={modal} closeModal={()=>setModal(false)} uid={props.uid} />
+            <DisplayProfile show={modal} closeModal={() => setModal(false)} uid={props.uid} />
             <Card style={{ borderRadius: '20px', cursor: 'pointer', border: '1px solid #D2EBEE' }} className="PortrayCard">
                 <Card.Img style={{ borderTopLeftRadius: '20px', borderTopRightRadius: '20px', width: '100%' }} variant="top" src={props.img} onClick={PushId} />
                 <Card.Body>

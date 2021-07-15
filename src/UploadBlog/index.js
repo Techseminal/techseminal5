@@ -9,6 +9,7 @@ import Post from './Post'
 import { firestore as db } from '../firebase/firebase-utils'
 import { withRouter } from 'react-router-dom'
 import Loader from '../components/Loader'
+// import Toaster from '../components/Toaster'
 
 function UploadBlog(props) {
 
@@ -69,7 +70,7 @@ function UploadBlog(props) {
         })
             .then(() => {
                 setLoader(false);
-                window.alert('uploaded successfully')
+                alert('uploaded successfully')
                 props.history.push('/')
             })
             .catch((error) => {
@@ -91,7 +92,7 @@ function UploadBlog(props) {
         })
             .then(() => {
                 setLoader(false);
-                window.alert('updated successfully')
+                
                 props.history.push('/')
             })
             .catch((error) => {

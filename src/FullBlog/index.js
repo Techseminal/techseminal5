@@ -21,7 +21,6 @@ function FullPortray(props) {
     const [timestamp, settimestamp] = useState(null);
     const [author, setauthor] = useState('');
     const [stars, setstars] = useState([]);
-    const [notifications, setnotifications] = useState([]);
     const [tags, setTags] = useState([]);
     const [UID, setUID] = useState('');
     const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
@@ -46,13 +45,8 @@ function FullPortray(props) {
             setUID(doc.data().userUID)
             setstars(doc.data().stars)
             setTags(doc.data().tags)
-            const notificationsData = doc.data().notifications.map((notification) => {
-                return {
-                    'uid': notification['uid'],
-                    'message': notification['message']
-                }
-            })
-            setnotifications(notificationsData)
+            console.log(doc.data().tags)
+            console.log()
             setLoader(false)
         })
     }, [portrayId]);

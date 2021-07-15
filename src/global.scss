@@ -130,7 +130,7 @@ body {
     color: #fff;
     padding: 16px;
     position: fixed;
-    z-index: 1;
+    z-index: 9999;
     right: 20px;
     bottom: 80%;
     .show {
@@ -139,24 +139,13 @@ body {
         animation: fadein 0.5s, fadeout 0.5s 2.5s;
     }
     @keyframes fadein {
-        from {
-            bottom: 0;
-            opacity: 0;
-        }
-        to {
-            bottom: 80%;
-            opacity: 1;
-        }
+        from {bottom: 0; opacity: 0;}
+        to {bottom: 80%; opacity: 1;}
     }
 
     @keyframes fadeout {
-        from {
-            bottom: 80%;
-            opacity: 1;
-        }
-        to {
-            bottom: 0;
-            opacity: 0;
-        }
+        from {bottom: 80%; opacity: 1;}
+        to {bottom: 0; opacity: 0;}
     }
 }
+

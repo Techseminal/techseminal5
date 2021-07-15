@@ -3,7 +3,9 @@ import { Col, Row } from 'react-bootstrap'
 import PortrayCard from './PortrayCard'
 import './Portray.scss'
 
+
 function Portray(props) {
+
     return (
         <Row className="Portray">
             <Col className="ColPortray">
@@ -19,9 +21,9 @@ function Portray(props) {
                             tags={blog.tags}
                             stars={blog.stars}
                             saved={props.saved}
-                            id={blog.id} 
+                            id={blog.id}
                             uid={blog.userUID}
-                            />
+                        />
                     ))
                 }
             </Col>

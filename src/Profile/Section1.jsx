@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import { firestore, signOut } from '../firebase/firebase-utils'
-import { Image, Row, Col, Button, Badge } from 'react-bootstrap'
+import { Image, Row, Col, Button, Badge, Dropdown, DropdownButton } from 'react-bootstrap'
 import { withRouter } from 'react-router-dom'
-import { AiFillFacebook, AiOutlineInstagram, AiOutlineLogout, AiOutlineTwitter, AiOutlineLinkedin } from 'react-icons/ai'
+import { AiFillFacebook, AiFillInstagram, AiOutlineLogout, AiOutlineTwitter, AiFillLinkedin } from 'react-icons/ai'
 import Modal from '../components/Modal'
+import {Link} from 'react-router-dom'
 
 function Section1(props) {
     const [username, setusername] = useState('');
@@ -61,10 +62,16 @@ function Section1(props) {
     return (
         <Row className="Section1">
             {show ? <Modal show={show} closeModal={() => setshow(false)} profiles={data === 'followers' ? followersData : followingData} title={data} /> : null}
-            <Col sm={12} md={4} style={{ textAlign: 'center', padding: '0 50px' }}>
+            <Col sm={12} md={4} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '0 50px' }}>
                 <Image className="photoURL" src={props.user.photoURL} alt="" /><br />
-                <Button variant='light' onClick={() => props.HEdit(true)} className="editbtn">Edit profile</Button><br />
-                <Button variant="danger" onClick={() => { signOut(); props.history.push('/') }} className="editbtn"><AiOutlineLogout /> logout</Button><br />
+                <div style={{ display: 'inline-grid', gridTemplateColumns: '1fr 1fr', gridGap: '10px' }}>
+                    <Button variant='light' onClick={() => props.HEdit(true)} className="editbtn">Edit profile</Button>
+                    <DropdownButton className="editbtn" id="dropdown-basic-button" title="status">
+                        <Dropdown.Item as={Link} >Action</Dropdown.Item>
+
+                    </DropdownButton>
+                </div>
+                <Button variant="danger" style={{ width: '100%' }} onClick={() => { signOut(); props.history.push('/') }} className="editbtn"><AiOutlineLogout /> logout</Button><br />
             </Col>
             <Col sm={12} md={8}>
                 <br />
@@ -88,8 +95,8 @@ function Section1(props) {
                     Social Media:&nbsp;
                     {twitter === '' ? null : <a href={'https://www.twitter.com/' + twitter} target="_blank" rel="noreferrer"><i><AiOutlineTwitter /></i></a>}
                     {facebook === '' ? null : <a href={'https://www.facebook.com/' + facebook} target="_blank" rel="noreferrer"><i><AiFillFacebook /></i></a>}
-                    {instagram === '' ? null : <a href={'https://www.instagram.com/' + instagram} target="_blank" rel="noreferrer"><i><AiOutlineInstagram /></i></a>}
-                    {linkedin === '' ? null : <a href={'https://www.linkedin.com/in/' + linkedin} target="_blank" rel="noreferrer"><i><AiOutlineLinkedin /></i></a>}
+                    {instagram === '' ? null : <a href={'https://www.instagram.com/' + instagram} target="_blank" rel="noreferrer"><i><AiFillInstagram /></i></a>}
+                    {linkedin === '' ? null : <a href={'https://www.linkedin.com/in/' + linkedin} target="_blank" rel="noreferrer"><i><AiFillLinkedin /></i></a>}
                 </div>}
             </Col>
         </Row>

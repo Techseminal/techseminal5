@@ -1,10 +1,11 @@
 import React from 'react'
 
-function Toaster() {
-    const [show, setShow] = useState(false);
+function Toaster({ message }) {
 
     return (
-        <h1></h1>
+        <div id="toast">
+            {message}
+        </div>
     );
 }
 
