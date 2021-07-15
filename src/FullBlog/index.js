@@ -3,7 +3,7 @@ import firebase, { firestore, signInWithGoogle } from '../firebase/firebase-util
 import { withRouter } from 'react-router'
 import { Container, Image, Row, Button, Card, Badge } from 'react-bootstrap'
 import { usePalette } from 'react-palette'
-import { BiEdit } from 'react-icons/bi'
+import { BiEdit, BiExit } from 'react-icons/bi'
 import { AiOutlineStar, AiOutlineSave, AiOutlineGoogle, AiOutlineShareAlt, AiFillFacebook, AiOutlineTwitter, AiFillStar, AiFillSave, AiOutlineSend, AiFillLinkedin, AiFillInstagram, AiFillMail, AiOutlineTeam } from 'react-icons/ai'
 import Loader from '../components/Loader'
 import './FullBlog.scss'
@@ -22,9 +22,9 @@ function FullPortray(props) {
     const [timestamp, settimestamp] = useState(null);
     const [author, setauthor] = useState('');
     const [stars, setstars] = useState([]);
-    const [notifications, setnotifications] = useState([]);
     const [tags, setTags] = useState([]);
     const [UID, setUID] = useState(null);
+    const [members, setmembers] = useState([]);
     const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
     // Author data
@@ -35,6 +35,7 @@ function FullPortray(props) {
     const [Twitter, setTwitter] = useState('');
     const [LinkedIn, setLinkedIn] = useState('');
     const [followers, setfollowers] = useState([]);
+    const [notifications, setnotifications] = useState([]);
     // current Blog data
     useEffect(() => {
         setLoader(true)
@@ -47,13 +48,7 @@ function FullPortray(props) {
             setUID(doc.data().userUID)
             setstars(doc.data().stars)
             setTags(doc.data().tags)
-            const notificationsData = doc.data().notifications.map((notification) => {
-                return {
-                    'uid': notification['uid'],
-                    'message': notification['message']
-                }
-            })
-            setnotifications(notificationsData)
+            setmembers(doc.data().members)
             setLoader(false)
         })
     }, [portrayId]);
@@ -68,6 +63,7 @@ function FullPortray(props) {
                 setTwitter(doc.data().twitter)
                 setLinkedIn(doc.data().linkedIn)
                 setfollowers(doc.data().followers)
+                setnotifications(doc.data().notifications)
             })
         }
     }, [UID]);
@@ -99,13 +95,30 @@ function FullPortray(props) {
     }
 
     function teamRequestHandler() {
-        notifications.push({
-            'uid': props.user.uid,
-            'message': 'I want to join with you'
-        })
-        firestore.collection('Blogs').doc(portrayId).update({
-            'notifications': notifications
-        })
+        if (members.find((member) => member === props.user.uid)) {
+            firestore.collection('Blogs').doc(portrayId).update({
+                'members': firebase.firestore.FieldValue.arrayRemove(props.user.uid)
+            })
+        }
+        else {
+            let message = prompt('Enter a message')
+            let username = ''
+            firestore.collection('Users').doc(props.user.uid).get()
+                .then(user => {
+                    username = user.data().username
+                    notifications.push({
+                        'username': username,
+                        'message': message,
+                        'type': 'team request',
+                        'uid': props.user.uid,
+                        'timestamp': Date.now(),
+                        'blog': portrayId
+                    })
+                    firestore.collection('Users').doc(UID).update({
+                        'notifications': notifications
+                    })
+                })
+        }
     }
 
     function shareHandler() {
@@ -146,15 +159,15 @@ function FullPortray(props) {
                 }
                 <Container>
                     {/* Header Section */}
-                    {UID ? <DisplayProfile show={modal} closeModal={() => setmodal(false)} uid={UID}/> : null}
+                    {UID ? <DisplayProfile show={modal} closeModal={() => setmodal(false)} uid={UID} /> : null}
                     <header>
                         <div className="UserAvatar" style={{ color: data.vibrant }}>
                             <img src="https://png.pngtree.com/png-vector/20190625/ourlarge/pngtree-business-male-user-avatar-vector-png-image_1511454.jpg" alt="" height="24px" />
                             <div>
-                                <strong style={{cursor:'pointer'}} onClick={() => setmodal(true)}>{author} &nbsp;
+                                <strong style={{ cursor: 'pointer' }}><span onClick={() => setmodal(true)}>{author}</span> &nbsp;
                                     {props.user ?
-                                        props.user.uid === UID ? null : followers.find((uid) => uid === props.user.uid) ? <Badge variant='primary' style={{fontWeight:'500', fontSize:'12px'}} onClick={followHandler}>Following</Badge> : <Badge variant='secondary' style={{fontWeight:'500', fontSize:'12px'}} onClick={followHandler}>Follow</Badge>
-                                        : <Badge variant='primary' style={{fontWeight:'500', fontSize:'12px'}} onClick={signInWithGoogle}>Follow</Badge>}
+                                        props.user.uid === UID ? null : followers.find((uid) => uid === props.user.uid) ? <Badge variant='primary' style={{ fontWeight: '500', fontSize: '12px' }} onClick={followHandler}>Following</Badge> : <Badge variant='secondary' style={{ fontWeight: '500', fontSize: '12px' }} onClick={followHandler}>Follow</Badge>
+                                        : <Badge variant='primary' style={{ fontWeight: '500', fontSize: '12px' }} onClick={signInWithGoogle}>Follow</Badge>}
                                 </strong>
                                 {timestamp ? <p>Posted on <cite>{timestamp.getDate()}&nbsp;{months[timestamp.getMonth()]}&nbsp;{timestamp.getFullYear()}</cite></p> : null}
                             </div>
@@ -180,12 +193,12 @@ function FullPortray(props) {
                     </article>
                     <br />
                     <Row style={{ margin: '10px 0', width: '100%', display: 'flex', justifyContent: 'flex-end' }}>
-                        <Button variant="light" className="TeamRequestBtn" style={{ border: `1px solid ${data.vibrant}` }} title="Send team request" onClick={props.user ? notifications.find((notification) => notification['uid'] === props.user.uid) ? null : teamRequestHandler : signInWithGoogle}>
-                            {props.user ? notifications.find((notification) => notification['uid'] === props.user.uid) ?
-                                <div><AiOutlineSend style={{ color: data.vibrant }} />&nbsp;&nbsp;Requested</div>
-                                : <div><AiOutlineTeam style={{ color: data.vibrant }} />&nbsp;&nbsp;Team request</div>
-                                : <div><AiOutlineTeam style={{ color: data.vibrant }} />&nbsp;&nbsp;Team request</div>}
-                        </Button>
+                        {UID === props.user?.uid ? null : <Button variant="light" className="TeamRequestBtn" style={{ border: `1px solid ${data.vibrant}` }} title="Send team request">
+                            {members.find((member) => member === props.user?.uid) ?
+                                <div onClick={props.user ? teamRequestHandler : signInWithGoogle}><BiExit style={{ color: data.vibrant }} />&nbsp;&nbsp;Exit from team</div>
+                                : notifications.find((notification => notification.uid === props.user.uid && notification.blog === portrayId)) ? <div><AiOutlineSend style={{ color: data.vibrant }} />&nbsp;&nbsp;Requested</div>
+                                : <div onClick={props.user ? teamRequestHandler : signInWithGoogle}><AiOutlineTeam style={{ color: data.vibrant }} />&nbsp;&nbsp;Team request</div>}
+                        </Button>}
                     </Row>
                     <div style={{ margin: '100px 10px' }}>
                         <StepProgressBar stage={25} />
