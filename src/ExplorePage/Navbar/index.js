@@ -69,6 +69,9 @@ function NavBar(props) {
                             'saved': [],
                             'skills': [],
                             'payment': {'gpay': '', 'phonepe': ''},
+                            'followers': [],
+                            'following': [],
+                            'notifications':[]
                         })
                         props.history.push('/profile?edit=true')
                     }

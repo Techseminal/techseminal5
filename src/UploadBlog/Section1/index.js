@@ -15,7 +15,7 @@ const Categories = ({category, CallBack}) => {
             <div className="Dropdown">
                 <Form.Group as={Col} controlId="formGridState">
                     <Form.Label className="CatLabel">Select your Category</Form.Label>
-                    <Form.Control onChange={e=>CallBack(e.target.value)} as="select" defaultValue={category}>
+                    <Form.Control onChange={e=>CallBack(e.target.value)} as="select" value={category}>
                         <option>Choose...</option>
                         <option>Project</option>
                         <option>Business Idea</option>

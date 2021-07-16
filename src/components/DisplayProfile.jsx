@@ -4,30 +4,36 @@ import { firestore } from '../firebase/firebase-utils'
 import { useState, useEffect } from 'react'
 import { Badge, Button, Modal } from 'react-bootstrap'
 import { AiOutlineTwitter, AiFillInstagram, AiFillFacebook, AiFillLinkedin } from 'react-icons/ai'
+import { withRouter } from 'react-router-dom'
 
-function DisplayProfile({ show, closeModal, uid }) {
+function DisplayProfile(props) {
 
     const [user, setUser] = useState(null)
 
     useEffect(() => {
-        firestore.collection('Users').doc(uid).get().then((doc) => {
+        firestore.collection('Users').doc(props.uid).get().then((doc) => {
             setUser(doc.data())
         }).catch((error) => {
             console.log("Error getting document:", error);
         });
-    }, [uid])
+    }, [props.uid])
+
+    const viewPosts = (username) => {
+        props.closeModal();
+        props.history.replace('/?user=' + username)
+    }
 
     return (
-        show && user ?
+        props.show && user ?
             <Modal
-                show={show}
-                onHide={closeModal}
+                show={props.show}
+                onHide={props.closeModal}
                 centered
             >
                 <section className="modal-body" style={{ maxWidth: '500px' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
                         <h6 style={{ textTransform: 'capitalize' }}>{user.username}</h6>
-                        <AiFillCloseCircle onClick={closeModal} style={{ fontSize: '20px', cursor: 'pointer' }} />
+                        <AiFillCloseCircle onClick={props.closeModal} style={{ fontSize: '20px', cursor: 'pointer' }} />
                     </div>
                     <hr />
                     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', fontSize: '14px', textAlign: 'center' }}>
@@ -51,7 +57,7 @@ function DisplayProfile({ show, closeModal, uid }) {
                             {user.linkedin === '' ? null : <Button as="a" style={{ margin: '0 10px', color: '#40A9FF' }} variant='light' href={'https://www.linkedin.com/in/' + user.linkedin} target="_blank" rel="noreferrer"><i><AiFillLinkedin /></i></Button>}
                         </div>}
                         <hr style={{ width: '100%' }}></hr>
-                        <Button variant="light" style={{ backgroundColor: '#fff', marginTop: '-36px' }}>view posts</Button>
+                        <Button onClick={() => viewPosts(user.username)} variant="light" style={{ backgroundColor: '#fff', marginTop: '-36px' }}>view posts</Button>
                     </div>
                 </section>
             </Modal>
@@ -59,4 +65,4 @@ function DisplayProfile({ show, closeModal, uid }) {
     )
 }
 
-export default DisplayProfile
+export default withRouter(DisplayProfile)

@@ -4,7 +4,7 @@ import { Image, Row, Col, Button, Badge, Dropdown, DropdownButton } from 'react-
 import { withRouter } from 'react-router-dom'
 import { AiFillFacebook, AiFillInstagram, AiOutlineLogout, AiOutlineTwitter, AiFillLinkedin } from 'react-icons/ai'
 import Modal from '../components/Modal'
-import {Link} from 'react-router-dom'
+import StatusUpload from '../components/statusUpload'
 
 function Section1(props) {
     const [username, setusername] = useState('');
@@ -59,16 +59,26 @@ function Section1(props) {
 
     const [data, setdata] = useState('');
 
+    // status states
+    const [modal, setModal] = useState(false)
+    const [status, setStatus] = useState('')
+    const handleStatus = (e) => {
+        setStatus(e);
+        setModal(true)
+    }
+
     return (
         <Row className="Section1">
-            {show ? <Modal show={show} closeModal={() => setshow(false)} profiles={data === 'followers' ? followersData : followingData} title={data} /> : null}
-            <Col sm={12} md={4} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '0 50px' }}>
-                <Image className="photoURL" src={props.user.photoURL} alt="" /><br />
-                <div style={{ display: 'inline-grid', gridTemplateColumns: '1fr 1fr', gridGap: '10px' }}>
-                    <Button variant='light' onClick={() => props.HEdit(true)} className="editbtn">Edit profile</Button>
-                    <DropdownButton className="editbtn" id="dropdown-basic-button" title="status">
-                        <Dropdown.Item as={Link} >Action</Dropdown.Item>
-
+            {modal ? <StatusUpload show={modal} closeModal={() => setModal(false)} status={status} /> : null}
+            {show ? <Modal show={show} closeModal={() => setshow(false)} uid={props.user.uid} following={following} profiles={data === 'followers' ? followersData : followingData} title={data} /> : null}
+            <Col sm={12} md={4} style={{ textAlign: 'center', padding: '0 50px' }}>
+                <Image className="photoURL" src={props.user.photoURL} alt="" /><br /><br />
+                <div style={{ display: 'inline-grid', gridTemplateColumns: '1fr 1fr', gridGap: '5px' }}>
+                    <Button variant='light' onClick={() => props.HEdit(true)} style={{ width: '100%' }}>Edit profile</Button>
+                    <DropdownButton id="dropdown-basic-button" size='small' style={{ width: '100%' }} title="status">
+                        <Dropdown.Item onClick={()=>handleStatus('Picture')}>Picture</Dropdown.Item>
+                        <Dropdown.Item onClick={()=>handleStatus('Poll')}>Poll</Dropdown.Item>
+                        <Dropdown.Item onClick={()=>handleStatus('Message')}>Messsage</Dropdown.Item>
                     </DropdownButton>
                 </div>
                 <Button variant="danger" style={{ width: '100%' }} onClick={() => { signOut(); props.history.push('/') }} className="editbtn"><AiOutlineLogout /> logout</Button><br />

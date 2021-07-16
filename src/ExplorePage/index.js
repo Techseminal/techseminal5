@@ -7,6 +7,7 @@ import Portray from '../ExplorePage/Portray'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './ExplorePage.scss'
 import Loader from '../components/Loader'
+import { withRouter } from 'react-router-dom'
 
 
 function ExplorePage(props) {
@@ -62,33 +63,41 @@ function ExplorePage(props) {
         // eslint-disable-next-line
     }, [searchKey, Blogs, filter])
 
-    function searchTag() {
-        setfilteredBlogs(Blogs.filter((blog) => blog.tags.find((tag) => tag.toLowerCase().includes(searchKey.toLowerCase()))))
-    }
 
-    function searchTitle() {
-        setfilteredBlogs(Blogs.filter((blog) => blog.title.toLowerCase().includes(searchKey.toLowerCase())))
-    }
+    const searchTag = () => setfilteredBlogs(Blogs.filter((blog) => blog.tags.find((tag) => tag.toLowerCase().includes(searchKey.toLowerCase()))))
+    const searchTitle = () => setfilteredBlogs(Blogs.filter((blog) => blog.title.toLowerCase().includes(searchKey.toLowerCase())))
+    const searchUser = () => setfilteredBlogs(Blogs.filter((blog) => blog.author.toLowerCase().includes(searchKey.toLowerCase())))
 
-    function searchUser() {
-        setfilteredBlogs(Blogs.filter((blog) => blog.author.toLowerCase().includes(searchKey.toLowerCase())))
-    }
+    const handleCategory = (value) => setcategory(value)
+    const handleSort = (value) => setsort(value)
 
-    function handleSearchKey(value) {
+    const handleSearchKey = (value) => {
+        if (props.location.search !== '' && value === '') {
+            props.history.push('/?user=')
+        }
         setsearchKey(value)
     }
 
-    function handleCategory(value) {
-        setcategory(value)
-    }
-
-    function handleSort(value) {
-        setsort(value)
-    }
-
-    function handleFilter(value) {
+    const handleFilter = (value) => {
+        if (props.location.search !== '') {
+            props.history.push('/?user=')
+        }
+        setsearchKey('')
         setfilter(value)
     }
+
+    useEffect(() => {
+        const user = props.location.search.slice(6).replace('%20', ' ')
+        if (user !== '') {
+            setfilter('user')
+            setsearchKey(user)
+            searchUser()
+        }
+        else {
+            setsearchKey('')
+        }
+        // eslint-disable-next-line
+    }, [props.location.search]);
 
     function sortBlogs() {
         if (sort === 'timestamp') {
@@ -107,6 +116,7 @@ function ExplorePage(props) {
             <Navbar user={props.user} />
             <Banner />
             <SearchBar
+                searchKey={searchKey}
                 setsearchKey={handleSearchKey}
                 setCategory={handleCategory}
                 category={category}
@@ -118,4 +128,4 @@ function ExplorePage(props) {
     )
 }
 
-export default ExplorePage;
+export default withRouter(ExplorePage);
